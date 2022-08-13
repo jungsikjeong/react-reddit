@@ -33,6 +33,19 @@ const StyledButton = styled.button`
         background: #379eeb;
       }
     `}
+
+    ${(props) =>
+    props.auth &&
+    css`
+      margin-bottom: 10px;
+      width: 100%;
+      border: none;
+      border-radius: 4px;
+      background: #a2a0a0;
+      :hover {
+        background: #379eeb;
+      }
+    `}
 `;
 
 const Button = (props) => {

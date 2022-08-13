@@ -49,12 +49,12 @@ const Header = (props) => {
             justifyContent: 'flex-end',
           }}
         >
-          <Button loginBtn={true}>
-            <Link to='/login'>Log In</Link>
-          </Button>
-          <Button signUpBtn={true}>
-            <Link to='/register'>Sign Up</Link>
-          </Button>
+          <Link to='/login'>
+            <Button loginBtn={true}>Log In</Button>
+          </Link>
+          <Link to='/register'>
+            <Button signUpBtn={true}>Sign Up</Button>
+          </Link>
         </Item>
       </List>
     </Container>
