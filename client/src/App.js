@@ -9,6 +9,7 @@ import Register from './components/Register';
 import Login from './components/Login';
 import Lists from './components/Lists';
 import CreateCommunity from './components/MainContents/CreateCommunity';
+import DetailCommunity from './components/Community/DetailCommunity';
 
 const App = () => {
   return (
@@ -23,6 +24,9 @@ const App = () => {
             <Route path='/register' element={<Register />} />
             <Route path='/lists' element={<Lists />} />
             <Route path='/createCommunity' element={<CreateCommunity />} />
+            {/* <Route path='/r/:communityTitle' element={<DetailCommunity />} /> 
+            이런식으로 할 에정*/}
+            <Route path='/r/communityTitle' element={<DetailCommunity />} />
           </Routes>
         </div>
       </Router>
