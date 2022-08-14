@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { IoIosArrowUp } from 'react-icons/io';
 
 import Button from '../common/Button';
+import { Link } from 'react-router-dom';
 
 const Item = styled.li`
   display: flex;
@@ -142,7 +143,9 @@ const MainCommunityItem = (props) => {
           bottom: '0',
         }}
       >
-        <StyledButton>View All</StyledButton>
+        <Link to='/lists'>
+          <StyledButton>View All</StyledButton>
+        </Link>
       </div>
     </>
   );

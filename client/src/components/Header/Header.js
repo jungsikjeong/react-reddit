@@ -31,6 +31,8 @@ const Item = styled.li`
 `;
 
 const Header = (props) => {
+  const user = true;
+
   return (
     <Container>
       <List>
@@ -49,12 +51,23 @@ const Header = (props) => {
             justifyContent: 'flex-end',
           }}
         >
-          <Link to='/login'>
-            <Button loginBtn={true}>Log In</Button>
-          </Link>
-          <Link to='/register'>
-            <Button signUpBtn={true}>Sign Up</Button>
-          </Link>
+          {user ? (
+            <>
+              <Link to='/createCommunity'>
+                <Button create={true}>커뮤니티 생성</Button>
+              </Link>
+              <Button logout={true}>Log Out</Button>
+            </>
+          ) : (
+            <>
+              <Link to='/login'>
+                <Button loginBtn={true}>Log In</Button>
+              </Link>
+              <Link to='/register'>
+                <Button signUpBtn={true}>Sign Up</Button>
+              </Link>
+            </>
+          )}
         </Item>
       </List>
     </Container>

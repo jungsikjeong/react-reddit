@@ -62,6 +62,39 @@ const StyledButton = styled.button`
         background: #379eeb;
       }
     `}
+
+    
+    ${(props) =>
+    props.logout &&
+    css`
+      width: 100px;
+      padding: 5px;
+      font-size: 14px;
+      border: none;
+      border-radius: 15px;
+      background: #379eeb;
+      :hover {
+        transition: 0.2s;
+        background: #ccc;
+      }
+    `}
+
+    ${(props) =>
+    props.create &&
+    css`
+      margin-right: 10px;
+      width: 130px;
+      padding: 5px;
+      font-size: 14px;
+      border: 1px solid #eadb9b;
+      border-radius: 15px;
+      background: #fff;
+      color: #000;
+      :hover {
+        transition: 0.2s;
+        background: #f6f7f8;
+      }
+    `}
 `;
 
 const Button = (props) => {

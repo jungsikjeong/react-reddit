@@ -36,7 +36,7 @@ const MainCommunityList = () => {
   return (
     <Container>
       <Title>
-        <h1>상위 커뮤니티</h1>
+        <h1>커뮤니티 목록</h1>
       </Title>
 
       <List>

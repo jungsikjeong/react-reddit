@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import ContentsList from './MainContents/ContentsList';
-import MainCommunityList from './MainCommunity/MainCommunityList';
+import MainCommunityList from './Community/MainCommunityList';
 
 const Container = styled.div`
   margin: 0 auto;

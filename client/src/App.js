@@ -7,6 +7,8 @@ import Home from './components/Home';
 import Header from './components/Header/Header';
 import Register from './components/Register';
 import Login from './components/Login';
+import Lists from './components/Lists';
+import CreateCommunity from './components/MainContents/CreateCommunity';
 
 const App = () => {
   return (
@@ -19,6 +21,8 @@ const App = () => {
             <Route path='/' element={<Home />} />
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
+            <Route path='/lists' element={<Lists />} />
+            <Route path='/createCommunity' element={<CreateCommunity />} />
           </Routes>
         </div>
       </Router>

@@ -40,6 +40,10 @@ const Input = styled.input`
   font-size: 16px;
   outline: none;
 
+  :focus {
+    outline: 1px solid #0079d3;
+  }
+
   :hover {
     background-color: #fff;
     border: 1px solid #0079d3;
