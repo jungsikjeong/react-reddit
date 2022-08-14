@@ -15,6 +15,10 @@ const Container = styled.div`
   border-radius: 4px;
   margin: 0 auto;
   font-weight: 600;
+
+  @media (max-width: 960px) {
+    display: none;
+  }
 `;
 
 const Title = styled.div`
