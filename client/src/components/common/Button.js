@@ -46,6 +46,22 @@ const StyledButton = styled.button`
         background: #379eeb;
       }
     `}
+
+    ${(props) =>
+    props.join &&
+    css`
+      margin-left: auto;
+      width: 50px;
+      padding: 5px;
+      font-size: 14px;
+      border: none;
+      border-radius: 15px;
+      background: #0079d3;
+      :hover {
+        transition: 0.2s;
+        background: #379eeb;
+      }
+    `}
 `;
 
 const Button = (props) => {

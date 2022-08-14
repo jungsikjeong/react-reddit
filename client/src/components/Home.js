@@ -14,16 +14,16 @@ const Container = styled.div`
 const Wrapper = styled.div`
   width: 100%;
   display: flex;
-  min-height: 1000vh;
+  /* min-height: 1000vh; */
 `;
 
 const Home = (props) => {
   return (
     <Container>
       <Wrapper>
-        <ContentsList>s</ContentsList>
+        <ContentsList />
 
-        <MainCommunityList>s</MainCommunityList>
+        <MainCommunityList />
       </Wrapper>
     </Container>
   );
