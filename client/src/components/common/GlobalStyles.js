@@ -13,20 +13,16 @@ const GlobalStyles = createGlobalStyle`
     body{
         font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         font-size:12px;
-        /* background-color:rgba(20, 20,20, 1); */
-        color:white;
         
+        color:white;
+        background:#DAE0E6;
     }
 
     .container{
-        // 임시height
-        height:100vh;
-        
         max-width:100%;
-        background:black;
+        height:100%;    
         padding: 68px 40px 20px 40px;
         margin:0 auto;
-        background:#DAE0E6;
     }
 `;
 
