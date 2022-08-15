@@ -13,6 +13,11 @@ const Container = styled.div`
   color: #000;
   font-weight: bold;
   height: 190px;
+
+  /* 모바일 버전에서는 사라짐 */
+  @media (max-width: 960px) {
+    display: none;
+  }
 `;
 
 const Title = styled.div`

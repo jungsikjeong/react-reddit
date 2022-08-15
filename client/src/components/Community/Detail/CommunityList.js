@@ -19,6 +19,12 @@ const List = styled.ul`
   font-size: 13px;
 `;
 
+const NoPost = styled.div`
+  text-align: center;
+  font-size: 20px;
+  color: #000;
+`;
+
 const CommunityList = () => {
   return (
     <Container>
@@ -27,6 +33,7 @@ const CommunityList = () => {
           <CommunityItem item={item} key={item.id} />
         ))}
       </List>
+      {/* <NoPost>아직 작성된 포스트가 없습니다.</NoPost> */}
     </Container>
   );
 };
