@@ -7,7 +7,7 @@ import MainCommunityList from './Community/MainCommunityList';
 
 const Container = styled.div`
   margin: 0 auto;
-  padding: 20px 24px;
+  padding: 88px 24px;
   max-width: 1248px;
 `;
 

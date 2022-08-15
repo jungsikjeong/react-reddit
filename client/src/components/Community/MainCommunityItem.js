@@ -6,6 +6,10 @@ import { IoIosArrowUp } from 'react-icons/io';
 import Button from '../common/Button';
 import { Link } from 'react-router-dom';
 
+/*********************** */
+// 메인화면 커뮤니티 리스트아이템들
+/************************ */
+
 const Item = styled.li`
   display: flex;
   align-items: center;

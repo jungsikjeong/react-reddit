@@ -21,7 +21,7 @@ const GlobalStyles = createGlobalStyle`
     .container{
         max-width:100%;
         height:100vh;    
-        padding: 68px 40px 20px 40px;
+        /* padding: 68px 40px 20px 40px; */
         margin:0 auto;
     }
 `;

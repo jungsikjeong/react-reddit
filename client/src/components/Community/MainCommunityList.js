@@ -4,6 +4,10 @@ import styled from 'styled-components';
 
 import MainCommunityItem from './MainCommunityItem';
 
+/*********************** */
+// 메인화면 커뮤니티 목록리스트
+/************************ */
+
 const Container = styled.div`
   position: relative;
   flex: 0 0 350px;

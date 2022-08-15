@@ -9,7 +9,7 @@ import Register from './components/Register';
 import Login from './components/Login';
 import Lists from './components/Lists';
 import CreateCommunity from './components/MainContents/CreateCommunity';
-import DetailCommunity from './components/Community/DetailCommunity';
+import DetailCommunity from './components/Community/Detail/DetailCommunity';
 
 const App = () => {
   return (

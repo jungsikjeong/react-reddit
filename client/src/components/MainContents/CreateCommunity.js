@@ -11,7 +11,7 @@ const Container = styled.div`
   background: white;
   border: 1px solid #ccc;
   border-radius: 4px;
-  margin: 50px auto;
+  margin: 118px auto;
   font-weight: 600;
   height: 450px;
 `;
