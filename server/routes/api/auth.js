@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const User = require('../../models/User');
@@ -23,43 +23,44 @@ router.get('/', auth, async (req, res) => {
 // @route   POST api/auth (로그인)
 // @desc    사용자 인증 및 토큰 받기
 // @access  Public
-router.post('/', (req, res) => {
-  const { name, email, password } = req.body;
+router.post('/', async (req, res) => {
+  const { email, password } = req.body;
 
   try {
     // 유저 확인
     // todo:(email)로 하면 안되는지 확인하기
-    const user = User.findOne({ email });
-
+    const user = await User.findOne({ email });
+    console.log(user);
     if (!user) {
       res.status(400).json({ error: '등록된 email이 없습니다.' });
     }
 
-    const isMatch = await bcrypt.compare(password,user.password);
+    const isMatch = await bcrypt.compare(password, user.password);
 
-    if(!isMatch){
-      res.status(400).json({error:'패스워드가 일치하지 않습니다.'})
+    if (!isMatch) {
+      res.status(400).json({ error: '패스워드가 일치하지 않습니다.' });
     }
 
     await user.save();
 
     const payload = {
-      user:{
-        id:user.id
-      }
-    }
-    
+      user: {
+        id: user.id,
+      },
+    };
 
     // 토큰 발급
-    jwt.sign(payload,process.env.JWT_SECRET,
-      {expiresIn:360000},
-      (err,token)=>{
-        if(err) throw err;
-        res.json({token})
-      })
-
+    jwt.sign(
+      payload,
+      process.env.JWT_SECRET,
+      { expiresIn: 360000 },
+      (err, token) => {
+        if (err) throw err;
+        res.json({ token });
+      }
+    );
   } catch (error) {
-    console.error(err.message);
+    console.error(error.message);
     res.status(500).send('Server Error');
   }
 });

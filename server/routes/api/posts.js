@@ -66,3 +66,5 @@ router.post('/', auth, async (req, res) => {
 // @route   GET api/posts
 // @desc    모든 게시물 가져 오기
 // @access  Public
+
+module.exports = router;

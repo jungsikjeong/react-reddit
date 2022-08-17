@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const User = require('../../models/User');
@@ -8,19 +8,24 @@ const Post = require('../../models/Post');
 const auth = require('../../middleware/auth');
 // const upload = require('../../middleware/upload');
 
-// @route   POST api/users (회원가입)
+// @route   POST /api/users (회원가입)
 // @desc    Register user
 // @access  Public
 router.post('/', async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
+    // // Validation
+    // if (!name || !email || !password) {
+    //   res.status(400).json({ error: '빈 칸을 입력해주세요!' });
+    // }
     // 사용자 확인
     let user = await User.findOne({ email });
 
     if (user) {
       // return을 추가해줘도되나?
-      return res.status(400).json({ error: '사용자가 이미 존재합니다.' });
+
+      res.status(400).json({ error: '사용자가 이미 존재합니다.' });
     }
 
     user = new User({
@@ -58,3 +63,5 @@ router.post('/', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
+
+module.exports = router;
