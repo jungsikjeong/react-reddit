@@ -41,10 +41,10 @@ const Form = styled.form`
   }
 `;
 
-const Search = (props) => {
+const Search = ({ MenuToggle }) => {
   return (
     <Container>
-      <Form>
+      <Form onClick={MenuToggle}>
         <Wrap>
           <FiSearch color='gray' fontSize='25px' />
           <Input placeholder='Search Reddit' />
@@ -54,6 +54,8 @@ const Search = (props) => {
   );
 };
 
-Search.propTypes = {};
+Search.propTypes = {
+  MenuToggle: PropTypes.func,
+};
 
 export default Search;

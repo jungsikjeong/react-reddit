@@ -53,6 +53,8 @@ const MobileSideMenu = ({ menuState }) => {
   );
 };
 
-MobileSideMenu.propTypes = {};
+MobileSideMenu.propTypes = {
+  menuState: PropTypes.bool,
+};
 
 export default MobileSideMenu;

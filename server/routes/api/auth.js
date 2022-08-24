@@ -30,7 +30,7 @@ router.post('/', async (req, res) => {
     // 유저 확인
     // todo:(email)로 하면 안되는지 확인하기
     const user = await User.findOne({ email });
-    console.log(user);
+
     if (!user) {
       res.status(400).json({ error: '등록된 email이 없습니다.' });
     }

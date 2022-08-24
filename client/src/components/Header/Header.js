@@ -50,23 +50,22 @@ const Mobile = styled.div`
 
 const Header = (props) => {
   const [Menu, setMenu] = useState(false);
-  const user = true;
+  const user = false;
 
   const MenuToggle = () => {
     setMenu(!Menu);
-    // console.log(Menu);
   };
 
   return (
     <Container>
       <List>
         <Item>
-          <Link to='/'>
+          <Link to='/' onClick={MenuToggle}>
             <img src={logo} alt='logo-img' />
           </Link>
         </Item>
         <Item>
-          <Search />
+          <Search MenuToggle={MenuToggle} />
         </Item>
 
         <Item
