@@ -1,19 +1,11 @@
 const mongoose = require('mongoose');
-// const config = require('config');
-// const db = config.get('mongoURI');
-const config = require('./key');
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(config.mongoURI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-
-    console.log('MongoDB Connected...');
-  } catch (err) {
-    console.error(err.message);
-    // 실패시 프로세스 종료
+    const conn = await mongoose.connect(process.env.MONGO_URI);
+    console.log(`MongoDB Connected:${conn.connection.host}`.cyan.underline);
+  } catch (error) {
+    console.log(`Error: ${error.message}`.red.underline.bold);
     process.exit(1);
   }
 };
