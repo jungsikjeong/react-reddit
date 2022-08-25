@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 
 import GlobalStyles from './components/common/GlobalStyles';
 import Home from './components/Home';
@@ -30,6 +31,7 @@ const App = () => {
           </Routes>
         </div>
       </Router>
+      <ToastContainer />
     </>
   );
 };
