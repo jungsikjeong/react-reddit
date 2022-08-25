@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { AiOutlineUser } from 'react-icons/ai';
 import { IoIosArrowDown } from 'react-icons/io';
+import { logout, reset } from '../../features/auth/authSlice';
 
 import logo from '../../assets/logo.png';
 import Search from './Search';
@@ -50,10 +52,17 @@ const Mobile = styled.div`
 
 const Header = (props) => {
   const [Menu, setMenu] = useState(false);
-  const user = false;
+
+  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
   const MenuToggle = () => {
     setMenu(!Menu);
+  };
+
+  const onLogout = () => {
+    dispatch(logout());
+    dispatch(reset());
   };
 
   return (
@@ -83,21 +92,24 @@ const Header = (props) => {
 
             <MobileSideMenu menuState={Menu} />
           </Mobile>
+
           {/* 데스크탑 메뉴 활성화 */}
           {user ? (
             <Desktop>
               <Link to='/createCommunity'>
                 <Button create={true}>커뮤니티 생성</Button>
               </Link>
-              <Button logout={true}>Log Out</Button>
+              <Button logout={true} onClick={onLogout}>
+                로그아웃
+              </Button>
             </Desktop>
           ) : (
             <Desktop>
               <Link to='/login'>
-                <Button loginBtn={true}>Log In</Button>
+                <Button loginBtn={true}>로그인</Button>
               </Link>
               <Link to='/register'>
-                <Button signUpBtn={true}>Sign Up</Button>
+                <Button signUpBtn={true}>회원가입</Button>
               </Link>
             </Desktop>
           )}

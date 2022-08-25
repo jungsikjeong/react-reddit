@@ -1,8 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import authService from './authService';
 
+const user = JSON.parse(localStorage.getItem('user'));
+
 const initialState = {
-  user: '',
+  user: user ? user : null,
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -27,6 +29,11 @@ export const register = createAsyncThunk(
     }
   }
 );
+
+// Logout user
+export const logout = createAsyncThunk('auth/logout', async () => {
+  await authService.logout();
+});
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -53,6 +60,10 @@ export const authSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
+        state.user = null;
+      })
+
+      .addCase(logout.fulfilled, (state) => {
         state.user = null;
       });
   },
