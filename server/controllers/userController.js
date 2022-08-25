@@ -56,6 +56,11 @@ const loginUser = asyncHandler(async (req, res) => {
 
   const user = await User.findOne({ email });
 
+  if (!user) {
+    res.status(401);
+    throw new Error('등록된 email이 아닙니다.');
+  }
+
   // 사용자와 비밀번호가 일치하는지 확인
   if (user && (await bcrypt.compare(password, user.password))) {
     return res.status(200).json({
@@ -66,7 +71,7 @@ const loginUser = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(401);
-    throw new Error('Invalid credentials');
+    throw new Error('패스워드가 일치하지 않습니다.');
   }
 });
 

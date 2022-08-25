@@ -1,9 +1,12 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
 import Button from './common/Button';
+import { login, reset } from '../features/auth/authSlice';
+import Spinner from './common/Spinner';
 
 const Container = styled.div`
   display: flex;
@@ -76,15 +79,93 @@ const SLink = styled(Link)`
 `;
 
 const Login = (props) => {
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+
+  const [btnOption, setBtnOption] = useState({
+    auth: false,
+    btnActivate: true,
+  });
+
+  const { email, password } = formData;
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { user, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.auth
+  );
+
+  // 버튼 색상변화
+  useEffect(() => {
+    if (email && password) {
+      setBtnOption({ auth: false, btnActivate: true });
+    } else {
+      setBtnOption({ auth: true, btnActivate: false });
+    }
+  }, [email, password]);
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message, {
+        position: 'top-center',
+      });
+    }
+
+    // 로그인시 '/' 로 이동
+    if (isSuccess || user) {
+      navigate('/');
+    }
+
+    dispatch(reset());
+  }, [isError, message, dispatch, isSuccess, user, navigate]);
+
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+  const onChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    const userData = {
+      email,
+      password,
+    };
+    dispatch(login(userData));
+  };
   return (
     <Container>
       <Wrapper>
         <Title>로그인</Title>
-        <Form>
-          <Input placeholder='Email' />
-          <Input placeholder='Username' />
-          <Input placeholder='Password' />
-          <Button auth={true}>로그인</Button>
+        <Form onSubmit={onSubmit}>
+          <Input
+            type='email'
+            name='email'
+            value={email}
+            onChange={onChange}
+            required
+            placeholder='Email'
+          />
+          <Input
+            type='password'
+            name='password'
+            autoComplete='on'
+            value={password}
+            onChange={onChange}
+            required
+            placeholder='Password'
+          />
+          <Button auth={btnOption.auth} btnActivate={btnOption.btnActivate}>
+            로그인
+          </Button>
           <span
             style={{
               fontSize: '14px',
@@ -100,7 +181,5 @@ const Login = (props) => {
     </Container>
   );
 };
-
-Login.propTypes = {};
 
 export default Login;

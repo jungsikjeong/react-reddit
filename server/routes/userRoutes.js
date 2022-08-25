@@ -5,6 +5,6 @@ const { registerUser, loginUser } = require('../controllers/userController');
 const { protect } = require('../middleware/authMiddleware');
 
 router.post('/', registerUser);
-router.post('/login', protect, loginUser);
+router.post('/login', loginUser);
 
 module.exports = router;
