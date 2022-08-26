@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { logout, reset } from '../../features/auth/authSlice';
 
 const Container = styled.div``;
 
@@ -32,9 +34,18 @@ const Item = styled.li`
 `;
 
 const MobileSideMenu = ({ menuState }) => {
+  const dispatch = useDispatch();
+
+  const { user } = useSelector((state) => state.auth);
+
+  const onLogout = () => {
+    dispatch(logout());
+    dispatch(reset());
+  };
+
   return (
     <Container>
-      {menuState && (
+      {menuState && user && (
         <Navbar>
           <List>
             <Link to='/createCommunity'>
@@ -44,8 +55,23 @@ const MobileSideMenu = ({ menuState }) => {
               <Item>모든 커뮤니티 보기</Item>
             </Link>
 
-            {/* todo:로그아웃에 성공하면 홈으로 돌려보내기 */}
-            <Item>로그아웃</Item>
+            <Item onClick={onLogout}>로그아웃</Item>
+          </List>
+        </Navbar>
+      )}
+
+      {menuState && !user && (
+        <Navbar>
+          <List>
+            <Link to='/register'>
+              <Item>회원 가입</Item>
+            </Link>
+            <Link to='/login'>
+              <Item>로그인</Item>
+            </Link>
+            <Link to='/lists'>
+              <Item>모든 커뮤니티 보기</Item>
+            </Link>
           </List>
         </Navbar>
       )}
