@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import dbArray from '../../../data/db';
 
-import CommunityItem from './CommunityItem';
+import DetailCommunityItem from './DetailCommunityItem';
 
 /**************************** */
 // 디테일 커뮤 리스트 //
@@ -30,7 +30,7 @@ const CommunityList = () => {
     <Container>
       <List>
         {dbArray.map((item) => (
-          <CommunityItem item={item} key={item.id} />
+          <DetailCommunityItem item={item} key={item.id} />
         ))}
       </List>
       {/* <NoPost>아직 작성된 포스트가 없습니다.</NoPost> */}

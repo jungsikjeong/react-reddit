@@ -123,14 +123,11 @@ const CreateCommunity = (props) => {
       toast.error(message);
     }
     if (isSuccess) {
-      if (community) {
-        navigate(`/r/${community._id}`);
-        dispatch(reset());
-      }
+      dispatch(reset());
     }
 
     dispatch(reset());
-  }, [isError, isSuccess, dispatch, navigate, message, community]);
+  }, [isError, isSuccess, dispatch, message, community]);
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -148,6 +145,7 @@ const CreateCommunity = (props) => {
       description,
     };
     dispatch(createCommunity(communityData));
+    navigate(`/r/${community._id}`);
   };
 
   if (isLoading) {

@@ -1,8 +1,11 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { getAllCommunity } from '../../features/community/communitySlice';
 
 import MainCommunityItem from './MainCommunityItem';
+import Spinner from '../common/Spinner';
 
 /*********************** */
 // 메인화면 커뮤니티 목록리스트
@@ -40,7 +43,25 @@ const List = styled.ul`
   }
 `;
 
+const NotFound = styled.div`
+  margin-top: 20px;
+  font-size: 20px;
+  text-align: center;
+`;
+
 const MainCommunityList = () => {
+  const { communities, isLoading } = useSelector((state) => state.community);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    dispatch(getAllCommunity('main'));
+  }, [dispatch]);
+
+  if (isLoading) {
+    <Spinner />;
+  }
   return (
     <Container>
       <Title>
@@ -48,12 +69,20 @@ const MainCommunityList = () => {
       </Title>
 
       <List>
-        <MainCommunityItem />
+        {communities && communities.length !== 0 ? (
+          communities.map((community, index) => (
+            <MainCommunityItem
+              key={community._id}
+              index={index}
+              item={community}
+            />
+          ))
+        ) : (
+          <NotFound>No Post yet..</NotFound>
+        )}
       </List>
     </Container>
   );
 };
-
-MainCommunityList.propTypes = {};
 
 export default MainCommunityList;

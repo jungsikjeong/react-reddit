@@ -1,9 +1,12 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCommunity } from '../../../features/community/communitySlice';
+import { useParams } from 'react-router-dom';
 
-import CommunityList from './CommunityList';
+import CommunityList from './DetailCommunityList';
 import DetailCommuInfo from './DetailCommuInfo';
+import Spinner from '../../common/Spinner';
 
 /****** ********************** */
 // 커뮤니티 디테일페이지         //
@@ -68,7 +71,22 @@ const Main = styled.div`
   width: 100%;
 `;
 
-const DetailCommunity = (props) => {
+const DetailCommunity = () => {
+  const dispatch = useDispatch();
+  const params = useParams();
+
+  const { communityId } = params;
+
+  const { community, isLoading } = useSelector((state) => state.community);
+
+  useEffect(() => {
+    dispatch(getCommunity(communityId));
+  }, [dispatch, communityId]);
+
+  if (isLoading) {
+    return <Spinner />;
+  }
+
   return (
     <Container>
       <BackgroundTop />
@@ -85,20 +103,17 @@ const DetailCommunity = (props) => {
           }}
         />
         <Box>
-          <Title>커뮤니티 타이틀</Title>
-          <Name>/r/커뮤니티 이름</Name>
+          <Title>{community.title}</Title>
+          <Name>/r/{community.name}</Name>
         </Box>
       </Wrapper>
 
       <Main>
         <CommunityList />
-
-        <DetailCommuInfo />
+        <DetailCommuInfo community={community} />
       </Main>
     </Container>
   );
 };
-
-DetailCommunity.propTypes = {};
 
 export default DetailCommunity;

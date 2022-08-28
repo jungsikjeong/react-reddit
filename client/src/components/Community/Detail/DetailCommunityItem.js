@@ -46,7 +46,7 @@ const PostContents = styled.div`
   line-height: 22px;
 `;
 
-const CommunityItem = ({ item }) => {
+const DetailCommunityItem = ({ item }) => {
   const {
     like,
     communityName,
@@ -98,8 +98,8 @@ const CommunityItem = ({ item }) => {
   );
 };
 
-CommunityItem.propTypes = {
+DetailCommunityItem.propTypes = {
   item: PropTypes.object,
 };
 
-export default CommunityItem;
+export default DetailCommunityItem;

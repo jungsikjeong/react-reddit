@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
 
 // Routes
 app.use('/api/users', require('./routes/userRoutes'));
-app.use('/api/createCommunity', require('./routes/communityRoutes'));
+app.use('/api/community', require('./routes/communityRoutes'));
 
 app.use(errorHandler);
 
