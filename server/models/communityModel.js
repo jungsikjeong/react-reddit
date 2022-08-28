@@ -2,9 +2,26 @@ const mongoose = require('mongoose');
 
 const communitySchema = mongoose.Schema(
   {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+    user: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
+
+    name: {
+      type: String,
+      required: [true, '커뮤니티 이름을 입력해주세요'],
+    },
+
+    title: {
+      type: String,
+      required: [true, '커뮤니티 주제를 입력해주세요'],
+    },
+
+    description: {
+      type: String,
+      required: [true, '해당 커뮤니티의 설명을 입력해주세요'],
     },
 
     posts: {

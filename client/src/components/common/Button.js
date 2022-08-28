@@ -43,19 +43,16 @@ const StyledButton = styled.button`
       border: none;
       border-radius: 4px;
       background: #a2a0a0;
-
     `}
 
     ${(props) =>
     props.btnActivate &&
     css`
-      
       margin-bottom: 10px;
       width: 100%;
       border: none;
       border-radius: 4px;
       background: #379eeb;
-  
     `}
 
   

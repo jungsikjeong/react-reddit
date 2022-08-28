@@ -90,6 +90,7 @@ const Login = (props) => {
   });
 
   const { email, password } = formData;
+  const { auth, btnActivate } = btnOption;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -163,7 +164,7 @@ const Login = (props) => {
             required
             placeholder='Password'
           />
-          <Button auth={btnOption.auth} btnActivate={btnOption.btnActivate}>
+          <Button auth={auth} btnActivate={btnActivate}>
             로그인
           </Button>
           <span
