@@ -24,11 +24,6 @@ const communitySchema = mongoose.Schema(
       required: [true, '해당 커뮤니티의 설명을 입력해주세요'],
     },
 
-    posts: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Post',
-    },
-
     backgroundImage: {
       type: String,
     },

@@ -8,10 +8,12 @@ const {
 const router = express.Router();
 
 const { protect } = require('../middleware/authMiddleware');
+const postRouter = require('./postRoutes');
+router.use('/:communityId/post', postRouter); // /api/community/:communityId/post
 
 // /api/community
 router.route('/').post(protect, createCommunity);
 router.get('/list', getCommunityList);
-router.get('/:id', GetCommunity);
+router.get('/:communityId', GetCommunity);
 
 module.exports = router;
