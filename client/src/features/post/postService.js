@@ -26,7 +26,7 @@ const getPosts = async (communityId) => {
 // get Post
 const getPost = async (communityId, postId) => {
   const res = await axios.get(API_URL + communityId + `/post/${postId}`);
-  console.log(res.data);
+
   return res.data;
 };
 
