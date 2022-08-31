@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 import CommunityList from './DetailCommunityList';
 import DetailCommuInfo from './DetailCommuInfo';
 import Spinner from '../../common/Spinner';
+import { getPosts } from '../../../features/post/postSlice';
 
 /****** ********************** */
 // 커뮤니티 디테일페이지         //
@@ -78,12 +79,18 @@ const DetailCommunity = () => {
   const { communityId } = params;
 
   const { community, isLoading } = useSelector((state) => state.community);
+  const { posts, isLoading: postsIsLoading } = useSelector(
+    (state) => state.post
+  );
+
+  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(getCommunity(communityId));
+    dispatch(getPosts(communityId));
   }, [dispatch, communityId]);
 
-  if (isLoading) {
+  if (isLoading || postsIsLoading) {
     return <Spinner />;
   }
 
@@ -109,8 +116,8 @@ const DetailCommunity = () => {
       </Wrapper>
 
       <Main>
-        <CommunityList />
-        <DetailCommuInfo community={community} />
+        <CommunityList posts={posts} />
+        <DetailCommuInfo community={community} user={user} />
       </Main>
     </Container>
   );

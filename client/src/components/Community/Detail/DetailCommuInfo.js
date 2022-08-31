@@ -1,7 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Modal from 'react-modal';
+import { useDispatch, useSelector } from 'react-redux';
+import { createPost, reset } from '../../../features/post/postSlice';
+
+import Spinner from '../../common/Spinner';
 
 /*********************** */
 // 디테일 커뮤니티 사이드
@@ -126,25 +132,40 @@ const customStyles = {
 };
 Modal.setAppElement('#root');
 
-const DetailCommuInfo = ({ community }) => {
+const DetailCommuInfo = ({ community, user }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+
+  const { isLoading, post } = useSelector((state) => state.post);
 
   // Open/close modal
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => setModalIsOpen(false);
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const params = useParams();
+  const { communityId } = params;
+
   const onSubmit = (e) => {
     e.preventDefault();
-    const postDate = {
-      title,
-      description,
-    };
 
-    // dispatch(createNote({ postDate, ticketId }));
+    if (title === '' || description === '') {
+      return toast.warning('양식에 맞게 입력해주세요');
+    }
+
+    dispatch(createPost({ title, description, communityId }));
+    setTitle('');
+    setDescription('');
     closeModal();
+
+    navigate(`/r/${communityId}/${post._id}`);
   };
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <Container>
@@ -195,7 +216,7 @@ const DetailCommuInfo = ({ community }) => {
             .toLocaleString('ko-KR')
             .substring(0, 12)}
         </Item>
-        <Button onClick={openModal}>포스트 생성</Button>
+        {user && <Button onClick={openModal}>포스트 생성</Button>}
       </List>
     </Container>
   );
@@ -203,6 +224,7 @@ const DetailCommuInfo = ({ community }) => {
 
 DetailCommuInfo.propTypes = {
   community: PropTypes.object,
+  user: PropTypes.object,
 };
 
 export default DetailCommuInfo;

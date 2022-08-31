@@ -25,10 +25,15 @@ const login = async (userData) => {
 // Logout user
 const logout = () => localStorage.removeItem('user');
 
+// loginClick
+const loginClick = (type) => {
+  return type;
+};
 const authService = {
   register,
   logout,
   login,
+  loginClick,
 };
 
 export default authService;

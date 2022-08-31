@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import dbArray from '../../../data/db';
 
 import DetailCommunityItem from './DetailCommunityItem';
 
@@ -25,19 +24,24 @@ const NoPost = styled.div`
   color: #000;
 `;
 
-const CommunityList = () => {
+const CommunityList = ({ posts }) => {
   return (
     <Container>
-      <List>
-        {dbArray.map((item) => (
-          <DetailCommunityItem item={item} key={item.id} />
-        ))}
-      </List>
-      {/* <NoPost>아직 작성된 포스트가 없습니다.</NoPost> */}
+      {posts ? (
+        <List>
+          {posts.map((post) => (
+            <DetailCommunityItem post={post} key={post._id} />
+          ))}
+        </List>
+      ) : (
+        <NoPost>아직 작성된 포스트가 없습니다.</NoPost>
+      )}
     </Container>
   );
 };
 
-CommunityList.propTypes = {};
+CommunityList.propTypes = {
+  posts: PropTypes.array,
+};
 
 export default CommunityList;

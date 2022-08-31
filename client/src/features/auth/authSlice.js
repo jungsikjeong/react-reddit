@@ -9,6 +9,7 @@ const initialState = {
   isSuccess: false,
   isLoading: false,
   message: '',
+  type: '',
 };
 
 // Register new user
@@ -48,6 +49,25 @@ export const login = createAsyncThunk('auth/login', async (user, thunkAPI) => {
 export const logout = createAsyncThunk('auth/logout', async () => {
   await authService.logout();
 });
+
+// login click
+export const loginClick = createAsyncThunk(
+  'auth/loginClick',
+  async (type, thunkAPI) => {
+    try {
+      return await authService.loginClick(type);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -94,6 +114,10 @@ export const authSlice = createSlice({
 
       .addCase(logout.fulfilled, (state) => {
         state.user = null;
+      })
+
+      .addCase(loginClick.fulfilled, (state, action) => {
+        state.type = action.payload;
       });
   },
 });

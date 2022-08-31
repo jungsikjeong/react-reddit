@@ -13,6 +13,7 @@ import CreateCommunity from './components/Community/Create/CreateCommunity';
 import DetailCommunityPage from './components/Community/Detail/DetailCommunityPage';
 import PrivateRoute from './components/common/PrivateRoute';
 import NotFound from './components/NotFound';
+import DetailPostPage from './components/Post/DetailPostPage';
 
 const App = () => {
   return (
@@ -29,9 +30,12 @@ const App = () => {
             <Route path='/createCommunity' element={<PrivateRoute />}>
               <Route path='/createCommunity' element={<CreateCommunity />} />
             </Route>
-            {/* <Route path='/r/:communityId' element={<DetailCommunity />} /> 
-            이런식으로 할 에정*/}
             <Route path='/r/:communityId' element={<DetailCommunityPage />} />
+            <Route
+              path='/r/:communityId/:postId'
+              element={<DetailPostPage />}
+            />
+
             <Route path='*' element={<NotFound />} />
           </Routes>
         </div>

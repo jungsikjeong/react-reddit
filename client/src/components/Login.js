@@ -95,7 +95,7 @@ const Login = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { user, isLoading, isError, isSuccess, message } = useSelector(
+  const { user, isLoading, isError, isSuccess, message, type } = useSelector(
     (state) => state.auth
   );
 
@@ -115,13 +115,16 @@ const Login = (props) => {
       });
     }
 
-    // 로그인시 '/' 로 이동
+    // 로그인시 '/' 로 이동 || postPage에서 로그인시 postPage로 이동
     if (isSuccess || user) {
+      if (isSuccess || type === 'postPage') {
+        return navigate(-1);
+      }
       navigate('/');
     }
 
     dispatch(reset());
-  }, [isError, message, dispatch, isSuccess, user, navigate]);
+  }, [isError, message, dispatch, isSuccess, user, navigate, type]);
 
   if (isLoading) {
     return <Spinner />;

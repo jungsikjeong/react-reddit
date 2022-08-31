@@ -8,6 +8,20 @@ const postSchema = mongoose.Schema(
       ref: 'User',
     },
 
+    community: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'Community',
+    },
+
+    communityName: {
+      type: String,
+    },
+
+    name: {
+      type: String,
+    },
+
     title: {
       type: String,
       required: [true, '제목을 입력해주세요'],
@@ -18,11 +32,31 @@ const postSchema = mongoose.Schema(
       required: [true, '포스트의 내용을 입력해주세요'],
     },
 
-    community: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: 'Community',
-    },
+    likes: [
+      {
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'user',
+        },
+      },
+    ],
+
+    comments: [
+      {
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'user',
+        },
+        text: {
+          type: String,
+          required: true,
+        },
+        date: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
   },
   {
     timestamps: true,
