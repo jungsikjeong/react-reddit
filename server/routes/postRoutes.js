@@ -3,10 +3,21 @@ const router = express.Router({ mergeParams: true });
 
 const { protect } = require('../middleware/authMiddleware');
 
-const { addPost, getPosts, getPost } = require('../controllers/postController');
+const {
+  addPost,
+  getPosts,
+  getPost,
+  addComment,
+  getComment,
+  deleteComment,
+} = require('../controllers/postController');
 
+// /api/community/:communityId/post
 router.route('/').get(getPosts).post(protect, addPost);
-// /api/community/:id/post
-router.route('/:postId').get(getPost);
+//GET /api/community/:communityId/post/:postId
+router.route('/:postId').get(getPost).post(protect, addComment);
+
+// /api/community/:communityId/post/:postId/:commentId
+router.route('/:postId/:commentId').delete(protect, deleteComment);
 
 module.exports = router;

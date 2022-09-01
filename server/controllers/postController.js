@@ -22,14 +22,14 @@ const getPosts = asyncHandler(async (req, res) => {
 // @route   GET /api/community/:communityId/post/:postId
 // @access  Public
 const getPost = asyncHandler(async (req, res) => {
-  const posts = await Post.findById(req.params.postId);
+  const post = await Post.findById(req.params.postId);
 
-  if (!posts) {
+  if (!post) {
     res.status(401);
     throw new Error('포스트가 없습니다.');
   }
 
-  return res.status(200).json(posts);
+  return res.status(200).json(post);
 });
 
 // @desc    Create Post
@@ -58,8 +58,88 @@ const addPost = asyncHandler(async (req, res) => {
   res.status(200).json(post);
 });
 
+// @desc    Create Post Comment
+// @route   POST /api/community/:communityId/post/:postId
+// @access  Private
+const addComment = asyncHandler(async (req, res) => {
+  const { text } = req.body;
+
+  const user = await User.findById(req.user.id);
+  const post = await Post.findById(req.params.postId);
+
+  if (!user) {
+    res.status(401);
+    throw new Error('해당 유저가 없습니다.');
+  }
+
+  if (!post) {
+    res.status(401);
+    throw new Error('게시물을 찾을 수 없습니다.');
+  }
+  if (!text || text === '') {
+    res.status(401);
+    throw new Error('게시글을 입력해주세요');
+  }
+
+  const newComment = {
+    text: text,
+    user: user,
+  };
+
+  await post.comments.unshift(newComment);
+
+  await post.save();
+  res.json(post.comments);
+});
+
+// @route   Delete Comment
+// @desc    DELETE /api/community/:communityId/post/:postId/:commentId
+// @access  Private
+const deleteComment = asyncHandler(async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.postId);
+
+    const comment = await post.comments.find(
+      (comment) => comment.id === req.params.commentId
+    );
+
+    if (!post) {
+      res.status(401);
+      throw new Error('게시물을 찾을 수 없습니다.');
+    }
+
+    if (!comment) {
+      res.status(401);
+      throw new Error('댓글을 찾을 수 없습니다.');
+    }
+
+    // Check user
+    if (comment.user.toString() !== req.user.id) {
+      return res.status(404);
+      throw new Error('권한이 없습니다.');
+    }
+
+    // Get remove index
+    // 댓글 삭제
+    const removeIndex = post.comments
+      .map((comment) => comment.id)
+      .indexOf(req.params.commentId);
+
+    post.comments.splice(removeIndex, 1);
+
+    await post.save();
+
+    res.json(post.comments);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 module.exports = {
   addPost,
   getPosts,
   getPost,
+  addComment,
+  deleteComment,
 };
