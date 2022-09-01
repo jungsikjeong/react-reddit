@@ -9,6 +9,7 @@ const {
   getPost,
   addComment,
   getComment,
+  updateComment,
   deleteComment,
 } = require('../controllers/postController');
 
@@ -18,6 +19,9 @@ router.route('/').get(getPosts).post(protect, addPost);
 router.route('/:postId').get(getPost).post(protect, addComment);
 
 // /api/community/:communityId/post/:postId/:commentId
-router.route('/:postId/:commentId').delete(protect, deleteComment);
+router
+  .route('/:postId/:commentId')
+  .put(protect, updateComment)
+  .delete(protect, deleteComment);
 
 module.exports = router;

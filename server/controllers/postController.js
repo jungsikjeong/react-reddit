@@ -136,10 +136,53 @@ const deleteComment = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Update Comment
+// @route   PUT /api/community/:communityId/post/:postId/:commentId
+// @access  Private
+const updateComment = asyncHandler(async (req, res) => {
+  // Get user using the id in the JWT
+  const user = await User.findById(req.user.id);
+
+  const post = await Post.findById(req.params.postId);
+
+  const comment = await post.comments.find(
+    (comment) => comment.id === req.params.commentId
+  );
+
+  if (!post) {
+    res.status(401);
+    throw new Error('게시물을 찾을 수 없습니다.');
+  }
+
+  if (!comment) {
+    res.status(401);
+    throw new Error('댓글을 찾을 수 없습니다.');
+  }
+
+  // Check user
+  if (comment.user.toString() !== req.user.id) {
+    return res.status(404);
+    throw new Error('권한이 없습니다.');
+  }
+
+  const updatedComment = await Post.findOneAndUpdate(
+    { _id: req.params.postId, 'comments._id': req.params.commentId },
+    {
+      $set: {
+        'comments.$.text': req.body.text,
+      },
+    },
+    { new: true }
+  );
+
+  updatedComment.comments.map((comment) => res.json(comment));
+});
+
 module.exports = {
   addPost,
   getPosts,
   getPost,
   addComment,
   deleteComment,
+  updateComment,
 };
