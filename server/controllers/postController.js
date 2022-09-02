@@ -84,11 +84,13 @@ const addComment = asyncHandler(async (req, res) => {
   const newComment = {
     text: text,
     user: user,
+    name: user.name,
   };
 
   await post.comments.unshift(newComment);
 
   await post.save();
+
   res.json(post.comments);
 });
 
@@ -126,7 +128,6 @@ const deleteComment = asyncHandler(async (req, res) => {
       .indexOf(req.params.commentId);
 
     post.comments.splice(removeIndex, 1);
-
     await post.save();
 
     res.json(post.comments);

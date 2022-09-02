@@ -1,12 +1,19 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { FaCommentAlt } from 'react-icons/fa';
 import { AiOutlineArrowUp, AiOutlineArrowDown } from 'react-icons/ai';
 import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getPost } from '../../features/post/postSlice';
-import Spinner from '../common/Spinner';
+import {
+  createComment,
+  getPost,
+  isSuccessReset,
+} from '../../features/post/postSlice';
 import { loginClick } from '../../features/auth/authSlice';
+import { toast } from 'react-toastify';
+
+import Spinner from '../common/Spinner';
+import CommentItem from './CommentItem';
 
 const Container = styled.div`
   margin: 0 auto;
@@ -115,6 +122,8 @@ const Button = styled.button`
 `;
 
 const DetailPostPage = () => {
+  const [text, setText] = useState('');
+
   const dispatch = useDispatch();
   const params = useParams();
 
@@ -128,8 +137,17 @@ const DetailPostPage = () => {
   const { title, description, createdAt, name } = post;
 
   useEffect(() => {
+    if (isError) {
+      toast.error(message);
+    }
+
+    if (isSuccess) {
+      dispatch(getPost({ communityId, postId }));
+      dispatch(isSuccessReset());
+    }
+
     dispatch(getPost({ communityId, postId }));
-  }, [dispatch, communityId, postId]);
+  }, [dispatch, communityId, isSuccess, postId, isError, message]);
 
   if (isLoading) {
     return <Spinner />;
@@ -138,6 +156,18 @@ const DetailPostPage = () => {
   const onLoginClick = () => {
     dispatch(loginClick('postPage'));
   };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    if (!text || text === '') {
+      return toast.warning('댓글을 입력해주세요!');
+    }
+    dispatch(createComment({ text, communityId, postId }));
+
+    setText('');
+  };
+
   return (
     <Container>
       <Wrapper>
@@ -157,7 +187,6 @@ const DetailPostPage = () => {
             className='icon'
           />
         </UpAndDownWrap>
-
         <FromWrap>
           Posted by &nbsp;
           {/* 임시로  아이콘 */}
@@ -173,27 +202,27 @@ const DetailPostPage = () => {
           /u/{name}{' '}
           {new Date(createdAt).toLocaleString('ko-KR').substring(0, 11)}
         </FromWrap>
-
         <Title>{title}</Title>
-
         <Contents>{description}</Contents>
-
         <div style={{ fontSize: '16px', marginLeft: '20px' }}>
           <FaCommentAlt style={{ color: 'black', marginRight: '3px' }} />
           Comments
         </div>
-
         <InputWrap>
           {user ? (
             <>
               <span style={{ color: '#379EEB' }}>{user.name}</span> 으로 댓글
               작성
-              <Form>
-                <TextArea />
+              <Form onSubmit={onSubmit}>
+                <TextArea
+                  placeholder='Post Comment'
+                  value={text}
+                  onChange={(e) => setText(e.target.value)}
+                />
+                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <Button>포스트 생성</Button>
+                </div>
               </Form>
-              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <Button>포스트 생성</Button>
-              </div>
             </>
           ) : (
             <>
@@ -208,6 +237,12 @@ const DetailPostPage = () => {
             </>
           )}
         </InputWrap>
+
+        {post &&
+          post.comments &&
+          post.comments.map((comment) => (
+            <CommentItem key={comment._id} comment={comment} />
+          ))}
       </Wrapper>
     </Container>
   );
