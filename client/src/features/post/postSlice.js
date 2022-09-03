@@ -145,6 +145,35 @@ export const RemoveComment = createAsyncThunk(
   }
 );
 
+// Update Comment
+export const updateComment = createAsyncThunk(
+  'post/updateComment',
+  async ({ communityId, postId, commentId, text }, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.token;
+
+      return await postService.updateComment(
+        {
+          communityId,
+          postId,
+          commentId,
+          text,
+        },
+        token
+      );
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const postSlice = createSlice({
   name: 'post',
   initialState,
@@ -224,6 +253,22 @@ export const postSlice = createSlice({
       })
 
       .addCase(RemoveComment.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+
+      .addCase(updateComment.pending, (state) => {
+        state.isLoading = true;
+      })
+
+      .addCase(updateComment.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.comments = action.payload;
+      })
+
+      .addCase(updateComment.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

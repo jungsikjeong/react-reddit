@@ -155,11 +155,6 @@ const updateComment = asyncHandler(async (req, res) => {
     throw new Error('게시물을 찾을 수 없습니다.');
   }
 
-  if (!comment) {
-    res.status(401);
-    throw new Error('댓글을 찾을 수 없습니다.');
-  }
-
   // Check user
   if (comment.user.toString() !== req.user.id) {
     return res.status(404);
@@ -176,7 +171,10 @@ const updateComment = asyncHandler(async (req, res) => {
     { new: true }
   );
 
-  updatedComment.comments.map((comment) => res.json(comment));
+  post.save();
+
+  res.json(post.comments);
+  // updatedComment.comments.map((comment) => res.json(comment));
 });
 
 module.exports = {

@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { RemoveComment } from '../../features/post/postSlice';
+import { RemoveComment, updateComment } from '../../features/post/postSlice';
 import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
+import Spinner from '../common/Spinner';
 
 const Container = styled.div`
   color: #1a1a1b;
@@ -81,6 +84,8 @@ const Button = styled.button`
 `;
 
 const CommentItem = ({ comment }) => {
+  const { isLoading } = useSelector((state) => state.post);
+
   const [edit, setEdit] = useState(false);
   const [text, setText] = useState(comment.text);
 
@@ -102,6 +107,11 @@ const CommentItem = ({ comment }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
+
+    if (text !== '' && text.trim().length <= 1) {
+      return toast.warning('텍스트는 두글자 이상이여야 합니다.');
+    }
+    dispatch(updateComment({ communityId, postId, commentId, text }));
   };
 
   const onRemove = () => {
@@ -109,6 +119,10 @@ const CommentItem = ({ comment }) => {
   };
 
   let exist = user && comment.user === user._id;
+
+  if (isLoading) {
+    <Spinner />;
+  }
 
   return (
     <Container>

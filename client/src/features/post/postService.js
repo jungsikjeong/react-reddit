@@ -60,12 +60,32 @@ const RemoveComment = async ({ communityId, postId, commentId }, token) => {
   return res.data;
 };
 
+// Update Comment
+const updateComment = async (
+  { communityId, postId, commentId, text },
+  token
+) => {
+  const config = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+
+  // @route   PUT /api/community/:communityId/post/:postId/:commentId
+  const res = await axios.put(
+    API_URL + communityId + `/post/${postId}/${commentId}`,
+    { text },
+    config
+  );
+
+  return res.data;
+};
+
 const postService = {
   createPost,
   getPosts,
   getPost,
   createComment,
   RemoveComment,
+  updateComment,
 };
 
 export default postService;
