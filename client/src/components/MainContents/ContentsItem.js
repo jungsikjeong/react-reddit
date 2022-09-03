@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { FaCommentAlt } from 'react-icons/fa';
 import { AiOutlineArrowUp, AiOutlineArrowDown } from 'react-icons/ai';
+import { Link } from 'react-router-dom';
 
 const Item = styled.li`
   position: relative;
@@ -46,54 +47,59 @@ const PostContents = styled.div`
   line-height: 22px;
 `;
 
-const ContentsItem = ({ item }) => {
+const ContentsItem = ({ post }) => {
   const {
-    like,
+    likes,
     communityName,
-    userName,
-    postTitle,
-    postContents,
-    date,
+    name,
+    title,
+    description,
+    createdAt,
     comments,
-  } = item;
+    community,
+  } = post;
+
   return (
     <Item>
-      <UpAndDownWrap>
-        <AiOutlineArrowUp color={'gray'} cursor={'pointer'} />
+      <Link to={`/r/${community}/${post._id}`}>
+        <UpAndDownWrap>
+          <AiOutlineArrowUp color={'gray'} cursor={'pointer'} />
 
-        {/* 추천횟수 */}
-        <span className='post-like'>{like}</span>
+          {/* 추천횟수 */}
+          <span className='post-like'>{likes.length}</span>
 
-        <AiOutlineArrowDown color={'gray'} cursor={'pointer'} />
-      </UpAndDownWrap>
+          <AiOutlineArrowDown color={'gray'} cursor={'pointer'} />
+        </UpAndDownWrap>
 
-      <CommunityName>
-        {/* 임시로 유저 아이콘 */}
-        <div
-          style={{
-            borderRadius: '50%',
-            background: 'black',
-            width: '15px',
-            height: '15px',
-            marginRight: '5px',
-          }}
-        />
-        /r/{communityName} •
-        <span style={{ opacity: '0.5' }}>
-          Posted by /u/{userName} &nbsp; {date}
-        </span>
-      </CommunityName>
+        <CommunityName>
+          {/* 임시로 유저 아이콘 */}
+          <div
+            style={{
+              borderRadius: '50%',
+              background: 'black',
+              width: '15px',
+              height: '15px',
+              marginRight: '5px',
+            }}
+          />
+          /r/{communityName} •
+          <span style={{ opacity: '0.5' }}>
+            Posted by /u/{name} &nbsp;{' '}
+            {new Date(createdAt).toLocaleString('ko-KR').substring(0, 11)}
+          </span>
+        </CommunityName>
 
-      <PostTitle>{postTitle}</PostTitle>
+        <PostTitle>{title}</PostTitle>
 
-      <PostContents>{postContents}</PostContents>
+        <PostContents>{description}</PostContents>
 
-      <div style={{ fontSize: '16px' }}>
-        <FaCommentAlt style={{ color: 'black', marginRight: '3px' }} />
-        <span style={{ fontSize: '17px', fontWeight: '400' }}>
-          {comments.length}
-        </span>
-      </div>
+        <div style={{ fontSize: '16px' }}>
+          <FaCommentAlt style={{ color: 'black', marginRight: '3px' }} />
+          <span style={{ fontSize: '17px', fontWeight: '400' }}>
+            {comments.length}
+          </span>
+        </div>
+      </Link>
     </Item>
   );
 };

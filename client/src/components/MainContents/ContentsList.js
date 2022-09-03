@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
-import dbArray from '../../data/db';
+import { getPosts } from '../../features/post/postSlice';
 
+import Spinner from '../common/Spinner';
 import ContentsItem from './ContentsItem';
 
 const Container = styled.div`
@@ -17,17 +18,25 @@ const List = styled.ul`
 `;
 
 const ContentsList = () => {
+  const { posts, isLoading } = useSelector((state) => state.post);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getPosts());
+  }, [dispatch]);
+
+  if (isLoading) {
+    return <Spinner />;
+  }
   return (
     <Container>
       <List>
-        {dbArray.map((item) => (
-          <ContentsItem item={item} key={item.id} />
-        ))}
+        {posts &&
+          posts.map((post) => <ContentsItem post={post} key={post._id} />)}
       </List>
     </Container>
   );
 };
-
-ContentsList.propTypes = {};
 
 export default ContentsList;

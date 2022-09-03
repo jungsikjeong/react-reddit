@@ -8,14 +8,29 @@ const Post = require('../models/postModel');
 // @route   GET /api/community/:communityId/post
 // @access  Public
 const getPosts = asyncHandler(async (req, res) => {
-  const posts = await Post.find(req.params.communityId);
+  if (req.params.communityId) {
+    const posts = await Post.find(req.params.communityId).sort({
+      date: -1,
+    });
 
-  if (!posts) {
-    res.status(401);
-    throw new Error('포스트가 없습니다.');
+    if (!posts) {
+      res.status(401);
+      throw new Error('포스트가 없습니다.');
+    }
+
+    return res.status(200).json(posts);
+  } else {
+    const posts = await Post.find().sort({
+      date: -1,
+    });
+
+    if (!posts) {
+      res.status(401);
+      throw new Error('포스트가 없습니다.');
+    }
+
+    return res.status(200).json(posts);
   }
-
-  return res.status(200).json(posts);
 });
 
 // @desc    Get Post
