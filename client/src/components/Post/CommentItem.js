@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RemoveComment } from '../../features/post/postSlice';
 import { useParams } from 'react-router-dom';
@@ -30,6 +30,39 @@ const EditRemove = styled.div`
   padding-left: 5px;
 `;
 
+const Form = styled.form`
+  margin-top: 5px;
+`;
+
+const TextArea = styled.textarea`
+  width: 100%;
+  min-height: 100px;
+  margin: 10px 0px;
+  background-color: #f6f7f8;
+  border: 0;
+  border-radius: 4px;
+  outline: 0;
+  font-size: 16px;
+  outline: none;
+  :focus {
+    background-color: #fff;
+    outline: 1px solid #0079d3;
+  }
+
+  :hover {
+    background-color: #fff;
+    border: 1px solid #0079d3;
+  }
+  ${(props) =>
+    props.optionDisabled &&
+    css`
+      :hover {
+        background: #f6f7f8;
+        border: none;
+      }
+    `}
+`;
+
 const Button = styled.button`
   border-radius: 2px;
   align-items: center;
@@ -48,6 +81,9 @@ const Button = styled.button`
 `;
 
 const CommentItem = ({ comment }) => {
+  const [edit, setEdit] = useState(false);
+  const [text, setText] = useState(comment.text);
+
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const params = useParams();
@@ -55,32 +91,67 @@ const CommentItem = ({ comment }) => {
   const { communityId, postId } = params;
   const { _id: commentId } = comment;
 
-  const onEdit = () => {};
+  const onOpenEdit = () => {
+    setEdit(true);
+  };
+
+  const onCloseEdit = () => {
+    setEdit(false);
+    setText(comment.text);
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+  };
 
   const onRemove = () => {
     dispatch(RemoveComment({ communityId, postId, commentId }));
   };
 
-  let test = user && comment.user === user._id;
+  let exist = user && comment.user === user._id;
 
   return (
     <Container>
-      <Wrapper>
-        <User>
-          {new Date(comment.date).toLocaleString('ko-KR').substring(0, 11)}
+      {edit ? (
+        <>
+          <User>
+            {new Date(comment.date).toLocaleString('ko-KR').substring(0, 11)}
 
-          <span style={{ marginLeft: '7px', fontWeight: 'bold' }}>
-            {comment.name}
-          </span>
-        </User>
+            <span style={{ marginLeft: '7px', fontWeight: 'bold' }}>
+              {comment.name}
+            </span>
+          </User>
+          <Form onSubmit={onSubmit}>
+            <TextArea
+              placeholder={`${comment.name}님의 댓글 작성중..`}
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+            />
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <Button>포스트 생성</Button>
+              <Button onClick={onCloseEdit}>포스트 취소</Button>
+            </div>
+          </Form>
+        </>
+      ) : (
+        <Wrapper>
+          <User>
+            {new Date(comment.date).toLocaleString('ko-KR').substring(0, 11)}
 
-        <Text>{comment.text}</Text>
-        {test && (
-          <EditRemove>
-            <Button>Edit</Button> <Button onClick={onRemove}>Remove</Button>
-          </EditRemove>
-        )}
-      </Wrapper>
+            <span style={{ marginLeft: '7px', fontWeight: 'bold' }}>
+              {comment.name}
+            </span>
+          </User>
+
+          <Text>{comment.text}</Text>
+          {exist && (
+            <EditRemove>
+              <Button onClick={onOpenEdit}>Edit</Button>
+              <Button onClick={onRemove}>Remove</Button>
+            </EditRemove>
+          )}
+        </Wrapper>
+      )}
     </Container>
   );
 };

@@ -160,8 +160,8 @@ const DetailPostPage = () => {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    if (!text || text === '') {
-      return toast.warning('댓글을 입력해주세요!');
+    if (text !== '' && text.trim().length <= 1) {
+      return toast.warning('텍스트는 두글자 이상이여야 합니다.');
     }
     dispatch(createComment({ text, communityId, postId }));
 
