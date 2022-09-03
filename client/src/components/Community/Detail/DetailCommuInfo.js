@@ -137,7 +137,9 @@ const DetailCommuInfo = ({ community, user }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
-  const { isLoading, post } = useSelector((state) => state.post);
+  const { isLoading, post, isePostSuccess } = useSelector(
+    (state) => state.post
+  );
 
   // Open/close modal
   const openModal = () => setModalIsOpen(true);
@@ -147,6 +149,13 @@ const DetailCommuInfo = ({ community, user }) => {
   const navigate = useNavigate();
   const params = useParams();
   const { communityId } = params;
+
+  useEffect(() => {
+    if (isePostSuccess) {
+      navigate(`/r/${communityId}/${post._id}`);
+    }
+    dispatch(reset());
+  }, [dispatch, isePostSuccess, post, communityId, navigate]);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -159,8 +168,6 @@ const DetailCommuInfo = ({ community, user }) => {
     setTitle('');
     setDescription('');
     closeModal();
-
-    navigate(`/r/${communityId}/${post._id}`);
   };
 
   if (isLoading) {

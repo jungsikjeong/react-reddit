@@ -37,6 +37,7 @@ const getPost = asyncHandler(async (req, res) => {
 // @access  Private
 const addPost = asyncHandler(async (req, res) => {
   const { title, description } = req.body;
+
   // Get user using the id in the JWT
   const user = await User.findById(req.user.id);
   const findCommunity = await Community.findById(req.params.id);
@@ -46,16 +47,33 @@ const addPost = asyncHandler(async (req, res) => {
     throw new Error('User not found');
   }
 
-  const post = await Post.create({
-    title,
-    description,
-    community: req.params.id,
-    communityName: findCommunity.name,
-    name: user.name,
-    user: req.user.id,
-  });
+  const userExist = await findCommunity.user.find(
+    (item) => item._id.toString() === req.user.id
+  );
 
-  res.status(200).json(post);
+  if (!userExist) {
+    const post = await Post.create({
+      title,
+      description,
+      community: req.params.id,
+      communityName: findCommunity.name,
+      name: user.name,
+      user: req.user.id,
+    });
+    findCommunity.user.unshift(req.user.id);
+    await findCommunity.save();
+    return res.status(200).json(post);
+  } else {
+    const post = await Post.create({
+      title,
+      description,
+      community: req.params.id,
+      communityName: findCommunity.name,
+      name: user.name,
+      user: req.user.id,
+    });
+    res.status(200).json(post);
+  }
 });
 
 // @desc    Create Post Comment

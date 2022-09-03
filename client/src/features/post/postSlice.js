@@ -7,6 +7,7 @@ const initialState = {
   comments: [],
   isError: false,
   isSuccess: false,
+  isePostSuccess: false,
   isLoading: false,
   message: '',
 };
@@ -190,7 +191,7 @@ export const postSlice = createSlice({
       })
       .addCase(createPost.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.isSuccess = true;
+        state.isePostSuccess = true;
         state.post = action.payload;
       })
       .addCase(createPost.rejected, (state, action) => {
