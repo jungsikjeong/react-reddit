@@ -1,11 +1,12 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { IoIosArrowUp } from 'react-icons/io';
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllCommunity } from '../features/community/communitySlice';
 
 import Button from './common/Button';
-import { Link } from 'react-router-dom';
-
+import Spinner from './common/Spinner';
 /*********************** */
 // 커뮤니티 목록들
 /************************ */
@@ -50,6 +51,18 @@ const Item = styled.li`
 `;
 
 const Lists = (props) => {
+  const { communities, isLoading } = useSelector((state) => state.community);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllCommunity());
+  }, [dispatch]);
+
+  if (isLoading) {
+    return <Spinner />;
+  }
+
   return (
     <Container>
       <Title>
@@ -57,114 +70,29 @@ const Lists = (props) => {
       </Title>
 
       <List>
-        <Item>
-          <div className='number'>
-            1
-            <IoIosArrowUp style={{ margin: '0 5px', color: '#49D263' }} />
-          </div>
-          {/* 임시로 커뮤니티 아이콘 */}
-          <div
-            style={{
-              borderRadius: '50%',
-              background: 'black',
-              width: '25px',
-              height: '25px',
-              marginRight: '5px',
-            }}
-          />
-          <span>/r/커뮤니티 이름</span>
-
-          <Button join={true}>Join</Button>
-        </Item>
-
-        <Item>
-          <div className='number'>
-            2
-            <IoIosArrowUp style={{ margin: '0 5px', color: '#49D263' }} />
-          </div>
-          {/* 임시로 커뮤니티 아이콘 */}
-          <div
-            style={{
-              borderRadius: '50%',
-              background: 'black',
-              width: '25px',
-              height: '25px',
-              marginRight: '5px',
-            }}
-          />
-          <span>/r/커뮤니티 이름</span>
-
-          <Button join={true}>Join</Button>
-        </Item>
-
-        <Item>
-          <div className='number'>
-            3
-            <IoIosArrowUp style={{ margin: '0 5px', color: '#49D263' }} />
-          </div>
-          {/* 임시로 커뮤니티 아이콘 */}
-          <div
-            style={{
-              borderRadius: '50%',
-              background: 'black',
-              width: '25px',
-              height: '25px',
-              marginRight: '5px',
-            }}
-          />
-          <span>/r/커뮤니티 이름</span>
-
-          <Button join={true}>Join</Button>
-        </Item>
-
-        <Item>
-          <div className='number'>
-            4
-            <IoIosArrowUp style={{ margin: '0 5px', color: '#49D263' }} />
-          </div>
-          {/* 임시로 커뮤니티 아이콘 */}
-          <div
-            style={{
-              borderRadius: '50%',
-              background: 'black',
-              width: '25px',
-              height: '25px',
-              marginRight: '5px',
-            }}
-          />
-          <span>/r/커뮤니티 이름</span>
-
-          <Button join={true}>Join</Button>
-        </Item>
-
-        <Item>
-          <div className='number'>
-            5
-            <IoIosArrowUp style={{ margin: '0 5px', color: '#49D263' }} />
-          </div>
-          {/* 임시로 커뮤니티 아이콘 */}
-          <div
-            style={{
-              borderRadius: '50%',
-              background: 'black',
-              width: '25px',
-              height: '25px',
-              marginRight: '5px',
-            }}
-          />
-          <span>/r/커뮤니티 이름</span>
-
-          <Button join={true}>Join</Button>
-        </Item>
-
-        <div
-          style={{
-            padding: '12px',
-            position: 'absolute',
-            width: '100%',
-            bottom: '0',
-          }}
-        ></div>
+        {communities &&
+          communities.map((community) => (
+            <Item key={community._id}>
+              <div className='number'>
+                1
+                <IoIosArrowUp style={{ margin: '0 5px', color: '#49D263' }} />
+              </div>
+              {/* 임시로 커뮤니티 아이콘 */}
+              <div
+                style={{
+                  borderRadius: '50%',
+                  background: 'black',
+                  width: '25px',
+                  height: '25px',
+                  marginRight: '5px',
+                }}
+              />
+              <span>/r/{community.name}</span>
+              <Button join={true}>
+                <Link to={`/r/${community._id}`}>Join</Link>
+              </Button>
+            </Item>
+          ))}
       </List>
     </Container>
   );
