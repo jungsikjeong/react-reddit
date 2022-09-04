@@ -99,9 +99,8 @@ const CreateCommunity = (props) => {
     btnActivate: true,
   });
 
-  const { community, isError, isSuccess, isLoading, message } = useSelector(
-    (state) => state.community
-  );
+  const { community, isError, isCreateSuccess, isLoading, message } =
+    useSelector((state) => state.community);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -122,12 +121,13 @@ const CreateCommunity = (props) => {
     if (isError) {
       toast.error(message);
     }
-    if (isSuccess) {
+    if (isCreateSuccess) {
+      navigate(`/r/${community._id}`);
       dispatch(reset());
     }
 
     dispatch(reset());
-  }, [isError, isSuccess, dispatch, message, community]);
+  }, [navigate, isError, isCreateSuccess, dispatch, message, community]);
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -145,7 +145,6 @@ const CreateCommunity = (props) => {
       description,
     };
     dispatch(createCommunity(communityData));
-    navigate(`/r/${community._id}`);
   };
 
   if (isLoading) {

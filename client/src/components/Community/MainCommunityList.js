@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { getAllCommunity } from '../../features/community/communitySlice';
 
 import MainCommunityItem from './MainCommunityItem';
@@ -53,7 +52,6 @@ const MainCommunityList = () => {
   const { communities, isLoading } = useSelector((state) => state.community);
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getAllCommunity('main'));

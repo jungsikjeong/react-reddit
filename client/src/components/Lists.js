@@ -71,10 +71,11 @@ const Lists = (props) => {
 
       <List>
         {communities &&
-          communities.map((community) => (
+          communities.map((community, index) => (
             <Item key={community._id}>
               <div className='number'>
-                1
+                {index++}
+
                 <IoIosArrowUp style={{ margin: '0 5px', color: '#49D263' }} />
               </div>
               {/* 임시로 커뮤니티 아이콘 */}

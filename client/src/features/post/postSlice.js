@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import postService from './postService';
+import qs from 'qs';
 
 const initialState = {
   posts: [],
@@ -40,9 +41,31 @@ export const createPost = createAsyncThunk(
 // Get Posts
 export const getPosts = createAsyncThunk(
   'post/getAll',
-  async (communityId, thunkAPI) => {
+  async ({ communityId, onePost }, thunkAPI) => {
+    const queryString = qs.stringify({
+      onePost,
+    });
     try {
-      return await postService.getPosts(communityId);
+      return await postService.getPosts(communityId, queryString);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+// Get Posts Main
+export const getMainPosts = createAsyncThunk(
+  'post/getAllMain',
+  async (_, thunkAPI) => {
+    try {
+      return await postService.getMainPosts();
     } catch (error) {
       const message =
         (error.response &&
@@ -209,6 +232,20 @@ export const postSlice = createSlice({
         state.posts = action.payload;
       })
       .addCase(getPosts.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+
+      .addCase(getMainPosts.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getMainPosts.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.posts = action.payload;
+      })
+      .addCase(getMainPosts.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

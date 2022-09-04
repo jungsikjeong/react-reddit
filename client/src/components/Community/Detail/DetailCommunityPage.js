@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCommunity } from '../../../features/community/communitySlice';
@@ -73,6 +73,8 @@ const Main = styled.div`
 `;
 
 const DetailCommunity = () => {
+  const [onePost, setOnePost] = useState('onePost');
+
   const dispatch = useDispatch();
   const params = useParams();
 
@@ -87,8 +89,8 @@ const DetailCommunity = () => {
 
   useEffect(() => {
     dispatch(getCommunity(communityId));
-    dispatch(getPosts(communityId));
-  }, [dispatch, communityId]);
+    dispatch(getPosts({ communityId, onePost }));
+  }, [dispatch, communityId, onePost]);
 
   if (isLoading || postsIsLoading) {
     return <Spinner />;

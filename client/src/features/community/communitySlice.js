@@ -7,6 +7,7 @@ const initialState = {
   community: {},
   isError: false,
   isSuccess: false,
+  isCreateSuccess: false,
   isLoading: false,
   message: '',
 };
@@ -91,7 +92,7 @@ export const communitySlice = createSlice({
       })
       .addCase(createCommunity.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.isSuccess = true;
+        state.isCreateSuccess = true;
         state.community = action.payload;
       })
       .addCase(createCommunity.rejected, (state, action) => {

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { getPosts } from '../../features/post/postSlice';
+import { getMainPosts } from '../../features/post/postSlice';
 
 import Spinner from '../common/Spinner';
 import ContentsItem from './ContentsItem';
@@ -23,7 +23,7 @@ const ContentsList = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getPosts());
+    dispatch(getMainPosts());
   }, [dispatch]);
 
   if (isLoading) {

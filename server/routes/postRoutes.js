@@ -15,6 +15,7 @@ const {
 
 // /api/community/:communityId/post
 router.route('/').get(getPosts).post(protect, addPost);
+
 //GET /api/community/:communityId/post/:postId
 router.route('/:postId').get(getPost).post(protect, addComment);
 

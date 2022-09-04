@@ -27,7 +27,7 @@ const NoPost = styled.div`
 const CommunityList = ({ posts }) => {
   return (
     <Container>
-      {posts ? (
+      {posts && posts.length !== 0 ? (
         <List>
           {posts.map((post) => (
             <DetailCommunityItem post={post} key={post._id} />
