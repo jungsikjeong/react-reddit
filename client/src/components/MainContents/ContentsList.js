@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { getMainPosts } from '../../features/post/postSlice';
+import { getMainPosts, postLike } from '../../features/post/postSlice';
 
 import Spinner from '../common/Spinner';
 import ContentsItem from './ContentsItem';
@@ -22,6 +22,12 @@ const ContentsList = () => {
 
   const dispatch = useDispatch();
 
+  const onClickLike = (postId) => {
+    dispatch(postLike(postId));
+  };
+
+  const onClickDislike = () => {};
+
   useEffect(() => {
     dispatch(getMainPosts());
   }, [dispatch]);
@@ -33,7 +39,13 @@ const ContentsList = () => {
     <Container>
       <List>
         {posts &&
-          posts.map((post) => <ContentsItem post={post} key={post._id} />)}
+          posts.map((post) => (
+            <ContentsItem
+              post={post}
+              key={post._id}
+              onClickLike={onClickLike}
+            />
+          ))}
       </List>
     </Container>
   );

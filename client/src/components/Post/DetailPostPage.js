@@ -8,6 +8,7 @@ import {
   createComment,
   getPost,
   isSuccessReset,
+  postLike,
 } from '../../features/post/postSlice';
 import { loginClick } from '../../features/auth/authSlice';
 import { toast } from 'react-toastify';
@@ -157,6 +158,11 @@ const DetailPostPage = () => {
     dispatch(loginClick('postPage'));
   };
 
+  const onClickLike = (postId) => {
+    console.log(postId);
+    dispatch(postLike(postId));
+  };
+
   const onSubmit = (e) => {
     e.preventDefault();
 
@@ -176,6 +182,7 @@ const DetailPostPage = () => {
             color={'gray'}
             cursor={'pointer'}
             className='icon'
+            onClick={() => onClickLike(postId)}
           />
 
           {/* 추천횟수 */}

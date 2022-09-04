@@ -47,7 +47,7 @@ const PostContents = styled.div`
   line-height: 22px;
 `;
 
-const ContentsItem = ({ post }) => {
+const ContentsItem = ({ post, onClickLike }) => {
   const {
     likes,
     communityName,
@@ -61,16 +61,23 @@ const ContentsItem = ({ post }) => {
 
   return (
     <Item>
+      <UpAndDownWrap>
+        <AiOutlineArrowUp
+          color={'gray'}
+          cursor={'pointer'}
+          onClick={() => onClickLike(post._id)}
+        />
+
+        {/* 추천횟수 */}
+        <span className='post-like'>{likes.length}</span>
+
+        <AiOutlineArrowDown
+          color={'gray'}
+          cursor={'pointer'}
+          // onClick={onClickDislike}
+        />
+      </UpAndDownWrap>
       <Link to={`/r/${community}/${post._id}`}>
-        <UpAndDownWrap>
-          <AiOutlineArrowUp color={'gray'} cursor={'pointer'} />
-
-          {/* 추천횟수 */}
-          <span className='post-like'>{likes.length}</span>
-
-          <AiOutlineArrowDown color={'gray'} cursor={'pointer'} />
-        </UpAndDownWrap>
-
         <CommunityName>
           {/* 임시로 유저 아이콘 */}
           <div

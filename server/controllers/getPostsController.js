@@ -18,4 +18,34 @@ const getPosts = asyncHandler(async (req, res) => {
   return res.status(200).json(posts);
 });
 
-module.exports = { getPosts };
+// @desc    게시글 좋아요
+// @route   PUT /api/posts/like/:postId
+// @access  Private
+const postLike = asyncHandler(async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.postId).sort({
+      date: -1,
+    });
+    console.log(post);
+    // 게시글이 이미 좋아요 눌렸는지 확인
+    if (
+      post.likes.filter((like) => like.user.toString() === req.user.id).length >
+      0
+    ) {
+      res.status(401);
+      throw new Error('이미 좋아요를 누른 게시물입니다.');
+    }
+
+    post.likes.unshift({ user: req.user.id });
+
+    await post.save();
+
+    // console.log(post.likes);
+
+    res.json(post);
+  } catch (error) {
+    res.status(500).send('Server Error');
+  }
+});
+
+module.exports = { getPosts, postLike };

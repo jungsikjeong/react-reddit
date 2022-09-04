@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const API_URL = '/api/community/';
+const API_URL_POSTS = '/api/posts/';
 // /api/community/:id/post
 
 // Create new Post
@@ -33,6 +34,19 @@ const getMainPosts = async () => {
 // get Post
 const getPost = async (communityId, postId) => {
   const res = await axios.get(API_URL + communityId + `/post/${postId}`);
+
+  return res.data;
+};
+
+// Post Like
+const postLike = async (postId, token) => {
+  //  /api/posts/like/:postId
+  const config = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+
+  // const API_URL_POSTS = '/api/posts/';
+  const res = await axios.put(API_URL_POSTS + `like/${postId}`, config);
 
   return res.data;
 };
@@ -91,6 +105,7 @@ const postService = {
   getPosts,
   getMainPosts,
   getPost,
+  postLike,
   createComment,
   RemoveComment,
   updateComment,
