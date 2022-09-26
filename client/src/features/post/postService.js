@@ -40,7 +40,7 @@ const getPost = async (communityId, postId) => {
 
 // Post Like
 const postLike = async (postId, token) => {
-  const res = axios.request({
+  const res = await axios.request({
     url: `/api/posts/like/${postId}`,
     method: 'put',
     headers: { Authorization: `Bearer ${token}` },

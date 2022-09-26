@@ -36,7 +36,7 @@ const List = styled.ul`
   }
 `;
 
-const Lists = (props) => {
+const Lists = () => {
   const { communities, isLoading } = useSelector((state) => state.community);
 
   const dispatch = useDispatch();
@@ -58,13 +58,11 @@ const Lists = (props) => {
       <List>
         {communities &&
           communities.map((community, index) => (
-            <ListItem community={community} index={index} />
+            <ListItem key={community._id} community={community} index={index} />
           ))}
       </List>
     </Container>
   );
 };
-
-Lists.propTypes = {};
 
 export default Lists;

@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { getMainPosts, postLike } from '../../features/post/postSlice';
+import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import { getMainPosts, postLike, reset } from '../../features/post/postSlice';
 
 import Spinner from '../common/Spinner';
 import ContentsItem from './ContentsItem';
@@ -18,19 +19,31 @@ const List = styled.ul`
 `;
 
 const ContentsList = () => {
-  const { posts, isLoading } = useSelector((state) => state.post);
+  const { posts, isLoading, isError, message } = useSelector(
+    (state) => state.post
+  );
 
   const dispatch = useDispatch();
 
   const onClickLike = (postId) => {
     dispatch(postLike(postId));
+    if (!isError) {
+      dispatch(getMainPosts());
+      console.log('posts:', posts);
+    }
   };
 
   const onClickDislike = () => {};
 
   useEffect(() => {
+    if (isError) {
+      dispatch(reset());
+      toast.error(message, {
+        position: 'top-center',
+      });
+    }
     dispatch(getMainPosts());
-  }, [dispatch]);
+  }, [dispatch, isError, message]);
 
   if (isLoading) {
     return <Spinner />;
@@ -39,7 +52,7 @@ const ContentsList = () => {
     <Container>
       <List>
         {posts &&
-          posts.map((post) => (
+          posts?.map((post) => (
             <ContentsItem
               post={post}
               key={post._id}

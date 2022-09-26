@@ -15,7 +15,7 @@ const createCommunity = async (communityData, token) => {
 
 // Get All Communities
 const getAllCommunity = async (queryString) => {
-  const res = await axios.get(API_URL + `/list?${queryString}`);
+  const res = await axios.get(API_URL + `list?${queryString}`);
 
   return res.data;
 };

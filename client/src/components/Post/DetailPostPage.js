@@ -8,6 +8,7 @@ import {
   createComment,
   getPost,
   isSuccessReset,
+  postDetailReset,
   postLike,
 } from '../../features/post/postSlice';
 import { loginClick } from '../../features/auth/authSlice';
@@ -150,6 +151,12 @@ const DetailPostPage = () => {
     dispatch(getPost({ communityId, postId }));
   }, [dispatch, communityId, isSuccess, postId, isError, message]);
 
+  useEffect(() => {
+    return () => {
+      dispatch(postDetailReset());
+    };
+  }, []);
+
   if (isLoading) {
     return <Spinner />;
   }
@@ -159,7 +166,6 @@ const DetailPostPage = () => {
   };
 
   const onClickLike = (postId) => {
-    console.log(postId);
     dispatch(postLike(postId));
   };
 

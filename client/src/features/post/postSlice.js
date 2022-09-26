@@ -223,7 +223,10 @@ export const postSlice = createSlice({
   name: 'post',
   initialState,
   reducers: {
-    reset: (state) => initialState,
+    reset: (state) => {
+      state.message = null;
+    },
+    postDetailReset: (state) => initialState,
     isSuccessReset: (state) => {
       state.isSuccess = false;
     },
@@ -285,18 +288,18 @@ export const postSlice = createSlice({
         state.message = action.payload;
       })
 
-      // .addCase(postLike.pending, (state) => {
-      //   state.isLoading = true;
-      // })
-      // .addCase(postLike.fulfilled, (state, action) => {
-      //   state.isLoading = false;
-      //   state.posts = action.payload;
-      // })
-      // .addCase(postLike.rejected, (state, action) => {
-      //   state.isLoading = false;
-      //   state.isError = true;
-      //   state.message = action.payload;
-      // })
+      .addCase(postLike.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(postLike.fulfilled, (state, action) => {
+        state.isLoading = false;
+        // state.posts = action.payload;
+      })
+      .addCase(postLike.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
 
       .addCase(createComment.pending, (state) => {
         state.isLoading = true;
@@ -348,6 +351,5 @@ export const postSlice = createSlice({
   },
 });
 
-export const { reset } = postSlice.actions;
-export const { isSuccessReset } = postSlice.actions;
+export const { reset, isSuccessReset, postDetailReset } = postSlice.actions;
 export default postSlice.reducer;
