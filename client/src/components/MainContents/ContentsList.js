@@ -1,8 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
-import { getMainPosts, postLike, reset } from '../../features/post/postSlice';
+import {
+  getMainPosts,
+  messageReset,
+  postLike,
+  reset,
+} from '../../features/post/postSlice';
 
 import Spinner from '../common/Spinner';
 import ContentsItem from './ContentsItem';
@@ -19,7 +24,7 @@ const List = styled.ul`
 `;
 
 const ContentsList = () => {
-  const { posts, isLoading, isError, message } = useSelector(
+  const { posts, isLoading, isError, isSuccess, message } = useSelector(
     (state) => state.post
   );
 
@@ -27,26 +32,31 @@ const ContentsList = () => {
 
   const onClickLike = (postId) => {
     dispatch(postLike(postId));
-    if (!isError) {
-      dispatch(getMainPosts());
-      console.log('posts:', posts);
-    }
   };
 
   const onClickDislike = () => {};
 
   useEffect(() => {
-    if (isError) {
-      dispatch(reset());
-      toast.error(message, {
-        position: 'top-center',
-      });
-    }
+    return () => {
+      if (isSuccess) {
+        dispatch(reset());
+      }
+    };
+  }, [dispatch, isSuccess]);
+
+  useEffect(() => {
     dispatch(getMainPosts());
-  }, [dispatch, isError, message]);
+  }, [message, isError]);
 
   if (isLoading) {
     return <Spinner />;
+  }
+
+  if (isError) {
+    dispatch(messageReset());
+    toast.error(message, {
+      position: 'top-center',
+    });
   }
   return (
     <Container>

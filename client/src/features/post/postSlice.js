@@ -223,7 +223,8 @@ export const postSlice = createSlice({
   name: 'post',
   initialState,
   reducers: {
-    reset: (state) => {
+    reset: (state) => initialState,
+    messageReset: (state) => {
       state.message = null;
     },
     postDetailReset: (state) => initialState,
@@ -293,7 +294,10 @@ export const postSlice = createSlice({
       })
       .addCase(postLike.fulfilled, (state, action) => {
         state.isLoading = false;
-        // state.posts = action.payload;
+        state.posts = action.payload;
+        // state.posts = state.posts.map((post) =>
+        //   post._id === action._id ? { ...post, likes: action.payload } : post
+        // );
       })
       .addCase(postLike.rejected, (state, action) => {
         state.isLoading = false;
@@ -351,5 +355,6 @@ export const postSlice = createSlice({
   },
 });
 
-export const { reset, isSuccessReset, postDetailReset } = postSlice.actions;
+export const { reset, messageReset, isSuccessReset, postDetailReset } =
+  postSlice.actions;
 export default postSlice.reducer;

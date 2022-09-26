@@ -10,14 +10,14 @@ const Post = require('../models/postModel');
 const getPosts = asyncHandler(async (req, res) => {
   if (req.query.onePost) {
     const posts = await Post.find({ community: req.params.id }).sort({
-      date: -1,
+      createdAt: -1,
     });
 
     return res.status(200).json(posts);
   }
 
   const posts = await Post.find().sort({
-    date: -1,
+    createdAt: -1,
   });
 
   if (!posts) {

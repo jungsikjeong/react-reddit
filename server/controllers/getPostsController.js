@@ -7,7 +7,7 @@ const Post = require('../models/postModel');
 // @access  Public
 const getPosts = asyncHandler(async (req, res) => {
   const posts = await Post.find().sort({
-    date: -1,
+    createdAt: -1,
   });
 
   if (!posts) {
@@ -22,23 +22,25 @@ const getPosts = asyncHandler(async (req, res) => {
 // @route   PUT /api/posts/like/:postId
 // @access  Private
 const postLike = asyncHandler(async (req, res) => {
-  const post = await Post.findById(req.params.postId).sort({
-    date: -1,
-  });
+  const post = await Post.findById(req.params.postId);
 
   // 게시글이 이미 좋아요 눌렸는지 확인
-  if (
-    post.likes.filter((like) => like.user.toString() === req.user.id).length > 0
-  ) {
-    res.status(401);
-    throw new Error('이미 좋아요를 누른 게시물입니다.');
-  }
+  // if (
+  //   post.likes.filter((like) => like.user.toString() === req.user.id).length > 0
+  // ) {
+  //   res.status(401);
+  //   throw new Error('이미 좋아요를 누른 게시물입니다.');
+  // }
 
   post.likes.unshift({ user: req.user.id });
 
   await post.save();
 
-  res.json(post);
+  const posts = await Post.find().sort({
+    createdAt: -1,
+  });
+
+  res.json(posts);
 });
 
 module.exports = { getPosts, postLike };
