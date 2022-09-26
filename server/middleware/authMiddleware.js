@@ -18,7 +18,6 @@ const protect = asyncHandler(async (req, res, next) => {
 
       // 토큰에서 사용자 가져오기
       req.user = await User.findById(decoded.id).select('-password');
-
       next();
     } catch (error) {
       console.log(error);

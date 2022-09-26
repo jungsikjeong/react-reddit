@@ -26,12 +26,13 @@ const postLike = asyncHandler(async (req, res) => {
     const post = await Post.findById(req.params.postId).sort({
       date: -1,
     });
-    console.log(post);
+
     // 게시글이 이미 좋아요 눌렸는지 확인
     if (
       post.likes.filter((like) => like.user.toString() === req.user.id).length >
       0
     ) {
+      console.log('이미');
       res.status(401);
       throw new Error('이미 좋아요를 누른 게시물입니다.');
     }
@@ -39,8 +40,6 @@ const postLike = asyncHandler(async (req, res) => {
     post.likes.unshift({ user: req.user.id });
 
     await post.save();
-
-    // console.log(post.likes);
 
     res.json(post);
   } catch (error) {
