@@ -119,6 +119,27 @@ export const postLike = createAsyncThunk(
   }
 );
 
+// Post UnLike
+export const postUnLike = createAsyncThunk(
+  'post/postUnLike',
+  async (postId, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.token;
+
+      return await postService.postUnLike(postId, token);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 // Create new Comment
 export const createComment = createAsyncThunk(
   'post/createComment',
@@ -295,11 +316,21 @@ export const postSlice = createSlice({
       .addCase(postLike.fulfilled, (state, action) => {
         state.isLoading = false;
         state.posts = action.payload;
-        // state.posts = state.posts.map((post) =>
-        //   post._id === action._id ? { ...post, likes: action.payload } : post
-        // );
       })
       .addCase(postLike.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+
+      .addCase(postUnLike.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(postUnLike.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.posts = action.payload;
+      })
+      .addCase(postUnLike.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

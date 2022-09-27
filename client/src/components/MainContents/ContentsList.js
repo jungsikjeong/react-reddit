@@ -6,6 +6,7 @@ import {
   getMainPosts,
   messageReset,
   postLike,
+  postUnLike,
   reset,
 } from '../../features/post/postSlice';
 
@@ -27,14 +28,27 @@ const ContentsList = () => {
   const { posts, isLoading, isError, isSuccess, message } = useSelector(
     (state) => state.post
   );
+  const { user } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
 
   const onClickLike = (postId) => {
+    if (!user) {
+      return toast.error('로그인을 해주세요!', {
+        position: 'top-center',
+      });
+    }
     dispatch(postLike(postId));
   };
 
-  const onClickDislike = () => {};
+  const onClickDislike = (postId) => {
+    if (!user) {
+      return toast.error('로그인을 해주세요!', {
+        position: 'top-center',
+      });
+    }
+    dispatch(postUnLike(postId));
+  };
 
   useEffect(() => {
     return () => {
@@ -45,19 +59,20 @@ const ContentsList = () => {
   }, [dispatch, isSuccess]);
 
   useEffect(() => {
+    if (isError) {
+      toast.error(message, {
+        position: 'top-center',
+      });
+      dispatch(messageReset());
+    }
     dispatch(getMainPosts());
+    dispatch(reset());
   }, [message, isError]);
 
   if (isLoading) {
     return <Spinner />;
   }
 
-  if (isError) {
-    dispatch(messageReset());
-    toast.error(message, {
-      position: 'top-center',
-    });
-  }
   return (
     <Container>
       <List>
@@ -67,6 +82,7 @@ const ContentsList = () => {
               post={post}
               key={post._id}
               onClickLike={onClickLike}
+              onClickDislike={onClickDislike}
             />
           ))}
       </List>

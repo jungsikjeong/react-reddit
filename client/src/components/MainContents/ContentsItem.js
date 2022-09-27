@@ -47,9 +47,9 @@ const PostContents = styled.div`
   line-height: 22px;
 `;
 
-const ContentsItem = ({ post, onClickLike }) => {
+const ContentsItem = ({ post, onClickLike, onClickDislike }) => {
   const {
-    likes,
+    likesCounter,
     communityName,
     name,
     title,
@@ -69,12 +69,12 @@ const ContentsItem = ({ post, onClickLike }) => {
         />
 
         {/* 추천횟수 */}
-        <span className='post-like'>{likes.length}</span>
+        <span className='post-like'>{likesCounter}</span>
 
         <AiOutlineArrowDown
           color={'gray'}
           cursor={'pointer'}
-          // onClick={onClickDislike}
+          onClick={() => onClickDislike(post._id)}
         />
       </UpAndDownWrap>
       <Link to={`/r/${community}/${post._id}`}>
@@ -113,6 +113,8 @@ const ContentsItem = ({ post, onClickLike }) => {
 
 ContentsItem.propTypes = {
   item: PropTypes.object,
+  onClickLike: PropTypes.func,
+  onClickDislike: PropTypes.func,
 };
 
 export default ContentsItem;

@@ -49,6 +49,17 @@ const postLike = async (postId, token) => {
   return res.data;
 };
 
+// Post UnLike
+const postUnLike = async (postId, token) => {
+  const res = await axios.request({
+    url: `/api/posts/unLike/${postId}`,
+    method: 'put',
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  return res.data;
+};
+
 // Create new Comment
 const createComment = async ({ text, communityId, postId }, token) => {
   const config = {
@@ -104,6 +115,7 @@ const postService = {
   getMainPosts,
   getPost,
   postLike,
+  postUnLike,
   createComment,
   RemoveComment,
   updateComment,
