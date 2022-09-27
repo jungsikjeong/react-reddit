@@ -41,6 +41,15 @@ const postSchema = mongoose.Schema(
       },
     ],
 
+    unLikes: [
+      {
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'user',
+        },
+      },
+    ],
+
     likesCounter: {
       type: String,
       default: '0',
