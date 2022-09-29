@@ -6,10 +6,12 @@ import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   createComment,
+  errorReset,
   getPost,
   isSuccessReset,
-  postDetailReset,
   postLike,
+  postUnLike,
+  reset,
 } from '../../features/post/postSlice';
 import { loginClick } from '../../features/auth/authSlice';
 import { toast } from 'react-toastify';
@@ -141,6 +143,7 @@ const DetailPostPage = () => {
   useEffect(() => {
     if (isError) {
       toast.error(message);
+      // dispatch(errorReset());
     }
 
     if (isSuccess) {
@@ -153,20 +156,30 @@ const DetailPostPage = () => {
 
   useEffect(() => {
     return () => {
-      dispatch(postDetailReset());
+      dispatch(reset());
     };
   }, []);
-
-  if (isLoading) {
-    return <Spinner />;
-  }
 
   const onLoginClick = () => {
     dispatch(loginClick('postPage'));
   };
 
   const onClickLike = (postId) => {
+    if (!user) {
+      return toast.error('로그인을 해주세요!', {
+        position: 'top-center',
+      });
+    }
     dispatch(postLike(postId));
+  };
+
+  const onClickDislike = (postId) => {
+    if (!user) {
+      return toast.error('로그인을 해주세요!', {
+        position: 'top-center',
+      });
+    }
+    dispatch(postUnLike(postId));
   };
 
   const onSubmit = (e) => {
@@ -180,6 +193,10 @@ const DetailPostPage = () => {
     setText('');
   };
 
+  if (isLoading) {
+    return <Spinner />;
+  }
+
   return (
     <Container>
       <Wrapper>
@@ -192,12 +209,13 @@ const DetailPostPage = () => {
           />
 
           {/* 추천횟수 */}
-          <span className='post-like'>1</span>
+          <span className='post-like'>{post.likesCounter}</span>
 
           <AiOutlineArrowDown
             color={'gray'}
             cursor={'pointer'}
             className='icon'
+            onClick={() => onClickDislike(postId)}
           />
         </UpAndDownWrap>
         <FromWrap>

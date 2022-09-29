@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getMainPosts,
-  messageReset,
+  errorReset,
   postLike,
   postUnLike,
   reset,
@@ -63,11 +63,11 @@ const ContentsList = () => {
       toast.error(message, {
         position: 'top-center',
       });
-      dispatch(messageReset());
+      dispatch(errorReset());
     }
+
     dispatch(getMainPosts());
-    dispatch(reset());
-  }, [message, isError]);
+  }, [dispatch, message, isError]);
 
   if (isLoading) {
     return <Spinner />;
@@ -77,7 +77,7 @@ const ContentsList = () => {
     <Container>
       <List>
         {posts &&
-          posts?.map((post) => (
+          posts.map((post) => (
             <ContentsItem
               post={post}
               key={post._id}

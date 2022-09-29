@@ -34,16 +34,18 @@ const postLike = asyncHandler(async (req, res) => {
     throw new Error('이미 좋아요를 누른 게시물입니다.');
   }
 
+  // 게시글 비추천자 목록에 해당 유저 제거
   const removeIndex = post.unLikes
     .map((likeUser) => likeUser.user.toString())
-    .indexOf(req.user._id);
+    .indexOf(req.user._id.toString());
+
+  post.unLikes.splice(removeIndex, 1);
 
   postNumber = JSON.parse(post.likesCounter);
   postNumber++;
   const counter = JSON.stringify(postNumber);
 
   post.likes.unshift({ user: req.user.id });
-  post.unLikes.splice(removeIndex, 1);
   post.likesCounter = counter;
 
   await post.save();
@@ -52,7 +54,7 @@ const postLike = asyncHandler(async (req, res) => {
     createdAt: -1,
   });
 
-  return res.json(posts);
+  return res.json({ posts, post });
 });
 
 // @desc    게시글 싫어요
@@ -71,19 +73,29 @@ const postUnLike = asyncHandler(async (req, res) => {
     (unLike) => unLike.user.toString() === req.user._id.toString()
   );
 
-  if (likeExist && !unLikeExist) {
-    post.unLikes.unshift({ user: req.user.id });
+  if (unLikeExist) {
+    res.status(401);
+    throw new Error('이미 싫어요를 누른 게시물입니다.');
+  }
 
+  // 유저가 게시글 추천을 한 상태일때
+  if (likeExist) {
+    // 게시글 추천목록에서 해당 유저지움
+    // 지금 removeIndex가 계속 -1이 나온다.. splice를 해줄려면 -가 아니라 0또는 양수가 나와야한다.
+    /// indexOf는 ()안의 요소가 존재하지않으면 -1을 출력한다는데..?
     const removeIndex = post.likes
       .map((likeUser) => likeUser.user.toString())
-      .indexOf(req.user._id);
+      .indexOf(req.user._id.toString());
+
+    post.likes.splice(removeIndex, 1);
 
     postNumber = JSON.parse(post.likesCounter);
     postNumber--;
     const counter = JSON.stringify(postNumber);
-
-    post.likes.splice(removeIndex, 1);
     post.likesCounter = counter;
+
+    // 비추천 목록에 해당 유저 추가
+    post.unLikes.unshift({ user: req.user.id });
 
     await post.save();
 
@@ -91,12 +103,10 @@ const postUnLike = asyncHandler(async (req, res) => {
       createdAt: -1,
     });
 
-    return res.json(posts);
+    return res.json({ posts, post });
   } else {
-    if (unLikeExist) {
-      res.status(401);
-      throw new Error('이미 싫어요를 누른 게시물입니다.');
-    }
+    // 유저가 게시글 추천을 안누른 상태로 비추천 눌렀을때
+    post.unLikes.unshift({ user: req.user.id });
 
     postNumber = JSON.parse(post.likesCounter);
 
@@ -115,7 +125,7 @@ const postUnLike = asyncHandler(async (req, res) => {
       createdAt: -1,
     });
 
-    return res.json(posts);
+    return res.json({ posts, post });
   }
 });
 
