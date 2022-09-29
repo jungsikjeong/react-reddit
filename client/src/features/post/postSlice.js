@@ -38,6 +38,25 @@ export const createPost = createAsyncThunk(
   }
 );
 
+// Search Posts
+export const searchPosts = createAsyncThunk(
+  'post/searchPosts',
+  async (searchData, thunkAPI) => {
+    try {
+      return await postService.searchPosts(searchData);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 // Get Posts
 export const getPosts = createAsyncThunk(
   'post/getAll',
@@ -278,6 +297,20 @@ export const postSlice = createSlice({
         state.posts = action.payload;
       })
       .addCase(getPosts.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+
+      .addCase(searchPosts.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(searchPosts.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.posts = action.payload;
+      })
+      .addCase(searchPosts.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

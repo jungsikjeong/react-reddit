@@ -142,8 +142,8 @@ const DetailPostPage = () => {
 
   useEffect(() => {
     if (isError) {
+      dispatch(errorReset());
       toast.error(message);
-      // dispatch(errorReset());
     }
 
     if (isSuccess) {

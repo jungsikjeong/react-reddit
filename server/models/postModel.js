@@ -80,4 +80,6 @@ const postSchema = mongoose.Schema(
   }
 );
 
+postSchema.index({ title: 'text' });
+
 module.exports = mongoose.model('Post', postSchema);

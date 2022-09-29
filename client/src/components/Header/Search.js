@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { FiSearch } from 'react-icons/fi';
+import { useDispatch } from 'react-redux';
+import { useState } from 'react';
+import { searchPosts } from '../../features/post/postSlice';
 
 const Container = styled.div`
   margin-top: 10px;
@@ -42,12 +45,33 @@ const Form = styled.form`
 `;
 
 const Search = ({ MenuToggle }) => {
+  const [searchValue, setSearchValue] = useState('');
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {}, []);
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    dispatch(searchPosts(searchValue));
+
+    setSearchValue('');
+  };
+
+  const onChange = (e) => {
+    setSearchValue(e.target.value);
+  };
+
   return (
     <Container>
-      <Form onClick={MenuToggle}>
+      <Form onClick={MenuToggle} onSubmit={onSubmit}>
         <Wrap>
           <FiSearch color='gray' fontSize='25px' />
-          <Input placeholder='Search Reddit' />
+          <Input
+            value={searchValue}
+            onChange={onChange}
+            placeholder='Search Reddit'
+          />
         </Wrap>
       </Form>
     </Container>

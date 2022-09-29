@@ -202,7 +202,6 @@ const updateComment = asyncHandler(async (req, res) => {
   post.save();
 
   res.json(post.comments);
-  // updatedComment.comments.map((comment) => res.json(comment));
 });
 
 module.exports = {

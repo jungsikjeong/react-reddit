@@ -63,7 +63,7 @@ const ContentsList = () => {
       toast.error(message, {
         position: 'top-center',
       });
-      dispatch(errorReset());
+      // dispatch(errorReset());
     }
 
     dispatch(getMainPosts());

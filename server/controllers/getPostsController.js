@@ -129,4 +129,17 @@ const postUnLike = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { getPosts, postLike, postUnLike };
+// @desc    게시글 검색
+// @route   POST /api/posts/search
+// @access  Public
+const postSearch = asyncHandler(async (req, res) => {
+  const { searchData } = req.body;
+
+  const posts = await Post.find({
+    $text: { $search: `"${searchData}"` },
+  });
+
+  res.json(posts);
+});
+
+module.exports = { getPosts, postLike, postUnLike, postSearch };

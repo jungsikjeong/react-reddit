@@ -19,6 +19,13 @@ const createPost = async (postData, communityId, token) => {
   return res.data;
 };
 
+// Search Posts
+const searchPosts = async (searchData) => {
+  const res = await axios.post('/api/posts/search', { searchData });
+
+  return res.data;
+};
+
 // get Posts
 const getPosts = async (communityId, queryString) => {
   const res = await axios.get(API_URL + communityId + `/post?${queryString}`);
@@ -111,6 +118,7 @@ const updateComment = async (
 
 const postService = {
   createPost,
+  searchPosts,
   getPosts,
   getMainPosts,
   getPost,
