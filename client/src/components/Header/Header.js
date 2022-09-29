@@ -10,6 +10,7 @@ import logo from '../../assets/logo.png';
 import Search from './Search';
 import Button from '../common/Button';
 import MobileSideMenu from './MobileSideMenu';
+import { getMainPosts } from '../../features/post/postSlice';
 
 const Container = styled.header`
   color: white;
@@ -53,6 +54,7 @@ const Header = (props) => {
   const [Menu, setMenu] = useState(false);
 
   const { user } = useSelector((state) => state.auth);
+
   const dispatch = useDispatch();
 
   const MenuToggle = () => {
@@ -67,7 +69,7 @@ const Header = (props) => {
   return (
     <Container>
       <List>
-        <Item>
+        <Item onClick={() => dispatch(getMainPosts())}>
           <Link to='/' onClick={MenuToggle}>
             <img src={logo} alt='logo-img' />
           </Link>

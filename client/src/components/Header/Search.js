@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { FiSearch } from 'react-icons/fi';
@@ -49,7 +49,6 @@ const Search = ({ MenuToggle }) => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {}, []);
   const onSubmit = (e) => {
     e.preventDefault();
 
