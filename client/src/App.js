@@ -14,14 +14,22 @@ import DetailCommunityPage from './components/Community/Detail/DetailCommunityPa
 import PrivateRoute from './components/common/PrivateRoute';
 import NotFound from './components/NotFound';
 import DetailPostPage from './components/Post/DetailPostPage';
+import { menuClose } from './features/menu/menuSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const App = () => {
+  const { menuState } = useSelector((state) => state.menu);
+
+  const dispatch = useDispatch();
   return (
     <>
       <GlobalStyles />
       <Router>
         <Header />
-        <div className='container'>
+        <div
+          className='container'
+          onClick={() => dispatch(menuClose(menuState))}
+        >
           <Routes>
             <Route path='/' element={<Home />} />
             <Route path='/login' element={<Login />} />

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,6 +11,7 @@ import Search from './Search';
 import Button from '../common/Button';
 import MobileSideMenu from './MobileSideMenu';
 import { getMainPosts } from '../../features/post/postSlice';
+import { menuOnOff } from '../../features/menu/menuSlice';
 
 const Container = styled.header`
   color: white;
@@ -51,14 +52,13 @@ const Mobile = styled.div`
 `;
 
 const Header = (props) => {
-  const [Menu, setMenu] = useState(false);
-
   const { user } = useSelector((state) => state.auth);
+  const { menuState } = useSelector((state) => state.menu);
 
   const dispatch = useDispatch();
 
-  const MenuToggle = () => {
-    setMenu(!Menu);
+  const mobileMenuToggle = () => {
+    dispatch(menuOnOff());
   };
 
   const onLogout = () => {
@@ -67,15 +67,19 @@ const Header = (props) => {
   };
 
   return (
-    <Container>
+    <Container onClick={mobileMenuToggle}>
       <List>
-        <Item onClick={() => dispatch(getMainPosts())}>
-          <Link to='/' onClick={MenuToggle}>
-            <img src={logo} alt='logo-img' />
+        <Item>
+          <Link to='/'>
+            <img
+              src={logo}
+              alt='logo-img'
+              onClick={() => dispatch(getMainPosts())}
+            />
           </Link>
         </Item>
         <Item>
-          <Search MenuToggle={MenuToggle} />
+          <Search />
         </Item>
 
         <Item
@@ -86,12 +90,14 @@ const Header = (props) => {
           }}
         >
           {/* 모바일 버전에서 메뉴 활성화 */}
-          {/* user일때 보이는화면,아닌화면 등등.. */}
-          <Mobile onClick={MenuToggle}>
+          <Mobile>
             <AiOutlineUser color='gray' size='25px' />
-            <IoIosArrowDown color={Menu ? '#5CD773' : 'gray'} size='25px' />
+            <IoIosArrowDown
+              color={menuState ? '#5CD773' : 'gray'}
+              size='25px'
+            />
 
-            <MobileSideMenu menuState={Menu} />
+            <MobileSideMenu menuState={menuState} />
           </Mobile>
 
           {/* 데스크탑 메뉴 활성화 */}

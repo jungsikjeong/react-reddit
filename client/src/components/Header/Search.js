@@ -44,7 +44,7 @@ const Form = styled.form`
   }
 `;
 
-const Search = ({ MenuToggle }) => {
+const Search = () => {
   const [searchValue, setSearchValue] = useState('');
 
   const dispatch = useDispatch();
@@ -63,7 +63,7 @@ const Search = ({ MenuToggle }) => {
 
   return (
     <Container>
-      <Form onClick={MenuToggle} onSubmit={onSubmit}>
+      <Form onSubmit={onSubmit}>
         <Wrap>
           <FiSearch color='gray' fontSize='25px' />
           <Input
